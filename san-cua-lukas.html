@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sân của Lukas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0c14;--bg2:#16131f;--ink:#f8f5ef;--muted:#bdb6c4;
+  --line:rgba(244,240,232,.1);--gold:#d4a24e;--rose:#c96a6a;
+  --sage:#7a9b76;--steel:#6a82a8;--card:#1c1826;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 80% -10%, rgba(212,162,78,.08), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(106,130,168,.1), transparent 55%),
+    var(--bg);
+  color:var(--ink);font-family:'Be Vietnam Pro',sans-serif;min-height:100vh;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+.wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:clamp(20px,4vw,48px)}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(28px,5vw,56px)}
+.brand{font-family:'Fraunces',serif;font-size:clamp(20px,2.4vw,26px);font-weight:600;letter-spacing:-.01em}
+.brand .dot{color:var(--gold)}
+.live-tag{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.12em}
+.live-tag .pulse{width:9px;height:9px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 0 rgba(201,106,106,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(201,106,106,.5)}70%{box-shadow:0 0 0 12px rgba(201,106,106,0)}100%{box-shadow:0 0 0 0 rgba(201,106,106,0)}}
+
+.hub-head{margin-bottom:clamp(28px,4vw,44px)}
+.hub-head h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(34px,6vw,64px);line-height:1.02;letter-spacing:-.02em}
+.hub-head h1 em{font-style:italic;color:var(--gold)}
+.hub-head p{margin-top:14px;color:var(--muted);font-size:clamp(15px,1.7vw,18px);max-width:48ch}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px}
+.tile{
+  position:relative;text-align:left;cursor:pointer;
+  background:linear-gradient(160deg,var(--card),var(--bg2));
+  border:1px solid var(--line);border-radius:18px;padding:24px 22px 22px;overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s;animation:rise .6s both;
+}
+.tile:hover{transform:translateY(-6px);border-color:rgba(212,162,78,.45);box-shadow:0 20px 50px -25px rgba(0,0,0,.7)}
+.tile .kind{font-family:'Fraunces',serif;font-size:14px;color:var(--gold);opacity:.9;letter-spacing:.04em;text-transform:uppercase}
+.tile .ic{width:30px;height:30px;color:var(--gold);margin:14px 0 16px;display:block}
+.tile h3{font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:1.15;margin-bottom:8px;color:#fbf9f4}
+.tile p{color:#cbc5d2;font-size:15.5px;line-height:1.5}
+.tile .arrow{position:absolute;top:24px;right:22px;color:var(--muted);transition:transform .3s,color .3s}
+.tile:hover .arrow{transform:translate(3px,-3px);color:var(--gold)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+.game{display:none}
+.game.active{display:block;animation:fade .5s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.back{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);color:var(--muted);
+  font-family:'Be Vietnam Pro';font-size:14px;font-weight:500;padding:9px 16px;border-radius:100px;cursor:pointer;
+  transition:all .25s;margin-bottom:clamp(24px,4vw,40px)}
+.back:hover{color:var(--ink);border-color:var(--gold)}
+.game-label{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+.game-label .ic{width:26px;height:26px;color:var(--gold)}
+.game-label h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,3.5vw,38px);letter-spacing:-.01em}
+.game-sub{color:#cbc5d2;font-size:clamp(17px,2.1vw,21px);margin-bottom:clamp(26px,4vw,40px)}
+
+.stage{
+  position:relative;min-height:clamp(220px,30vh,300px);
+  background:linear-gradient(155deg,var(--card),var(--bg2));
+  border:1px solid var(--line);border-radius:24px;padding:clamp(28px,5vw,52px);
+  display:flex;align-items:center;justify-content:center;margin-bottom:26px;overflow:hidden;
+}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 300px at 50% 0%,rgba(212,162,78,.07),transparent 70%)}
+.prompt{position:relative;font-family:'Fraunces',serif;font-weight:400;font-size:clamp(28px,4.8vw,54px);line-height:1.22;text-align:center;letter-spacing:-.01em;max-width:22ch;color:#fbf9f4}
+.prompt.swap{animation:cardin .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes cardin{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+.placeholder{color:var(--muted);font-style:italic;font-size:clamp(18px,2.4vw,26px)}
+.counter{position:absolute;top:20px;right:24px;font-family:'Fraunces',serif;font-size:14px;color:var(--muted)}
+.counter b{color:var(--gold)}
+
+.controls{display:flex;flex-direction:column;gap:18px}
+.draw{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;padding:18px;border-radius:16px;cursor:pointer;
+  background:var(--gold);color:#1a1410;border:none;font-family:'Be Vietnam Pro';font-weight:700;font-size:clamp(16px,2vw,19px);
+  transition:transform .2s,filter .2s}
+.draw:hover{filter:brightness(1.08)}.draw:active{transform:scale(.985)}.draw svg{width:20px;height:20px}
+
+/* ===== format-specific UI ===== */
+/* slider */
+.slider-wrap{display:none;flex-direction:column;gap:14px}
+.slider-wrap.on{display:flex}
+.slider-row{display:flex;justify-content:space-between;font-size:clamp(15px,1.9vw,19px);color:var(--muted);font-weight:600}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:100px;
+  background:linear-gradient(90deg,var(--rose),var(--steel),var(--sage));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;
+  background:var(--gold);border:3px solid #1a1410;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:var(--gold);border:3px solid #1a1410;cursor:pointer}
+.slider-val{text-align:center;font-family:'Fraunces',serif;font-size:clamp(40px,7vw,72px);color:var(--gold);line-height:1}
+
+/* rank */
+.rank-wrap{display:none;flex-direction:column;gap:11px}
+.rank-wrap.on{display:flex}
+.rank-item{display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:14px;
+  background:var(--bg2);border:1px solid var(--line);cursor:grab;font-size:clamp(19px,2.6vw,26px);font-weight:600;
+  transition:background .2s,border-color .2s,transform .15s}
+.rank-item:active{cursor:grabbing}
+.rank-item.dragging{opacity:.5;border-color:var(--gold)}
+.rank-item .grip{color:var(--muted);flex-shrink:0}
+.rank-item .pos{font-family:'Fraunces',serif;color:var(--gold);font-size:clamp(24px,3.4vw,32px);width:30px;flex-shrink:0;text-align:center}
+
+/* binary */
+.binary-wrap{display:none;grid-template-columns:1fr 1fr;gap:14px}
+.binary-wrap.on{display:grid}
+.binary{padding:clamp(24px,4vw,40px) 22px;border-radius:18px;cursor:pointer;text-align:center;
+  background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+  font-family:'Fraunces',serif;font-weight:500;font-size:clamp(24px,3.6vw,38px);line-height:1.22;
+  transition:all .25s;min-height:clamp(160px,24vh,230px);display:flex;align-items:center;justify-content:center}
+.binary:first-child:hover{border-color:var(--steel);background:rgba(106,130,168,.14)}
+.binary:last-child:hover{border-color:var(--rose);background:rgba(201,106,106,.14)}
+.binary.pick-l{border-color:var(--steel);background:rgba(106,130,168,.24);box-shadow:0 0 0 1px var(--steel) inset}
+.binary.pick-r{border-color:var(--rose);background:rgba(201,106,106,.24);box-shadow:0 0 0 1px var(--rose) inset}
+
+/* score 1-10 */
+.score-wrap{display:none;flex-wrap:wrap;gap:10px;justify-content:center}
+.score-wrap.on{display:flex}
+.score-btn{width:clamp(48px,7vw,64px);height:clamp(48px,7vw,64px);border-radius:14px;cursor:pointer;
+  background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+  font-family:'Fraunces',serif;font-weight:600;font-size:clamp(18px,2.4vw,24px);transition:all .2s}
+.score-btn:hover{border-color:var(--gold);transform:translateY(-3px)}
+.score-btn.picked{background:var(--gold);color:#1a1410;border-color:var(--gold)}
+
+/* flip (reveal) */
+.flip-answer{display:none;margin-top:4px;padding:30px 32px;border-radius:16px;
+  background:rgba(212,162,78,.1);border:1px solid rgba(212,162,78,.4);
+  font-size:clamp(21px,2.9vw,30px);line-height:1.5;color:#fbf9f4;animation:cardin .5s both}
+.flip-answer.on{display:block}
+.flip-answer .tag{display:block;font-family:'Fraunces',serif;font-size:clamp(15px,1.8vw,18px);color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+
+/* fill (editable, dùng chính .prompt) */
+.prompt.editable{outline:none;cursor:text;width:100%;max-width:100%;min-height:1.2em}
+.prompt.editable:empty::before{content:attr(data-placeholder);color:var(--muted);font-style:italic}
+
+.hidden{display:none!important}
+@media(max-width:560px){.binary-wrap.on{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Sân của Lukas<span class="dot">.</span></div>
+    <div class="live-tag"><span class="pulse"></span>On Air</div>
+  </div>
+
+  <section id="hub">
+    <div class="hub-head">
+      <h1>Bảy trò chơi,<br>một <em>cuộc chuyện</em>.</h1>
+      <p>Mỗi trò một luật. Kéo, chọn, chấm, lật, điền. Bạn dẫn, khán giả cãi.</p>
+    </div>
+    <div class="grid" id="tiles"></div>
+  </section>
+
+  <section id="gameView" class="game">
+    <button class="back" onclick="goHub()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Về sảnh
+    </button>
+    <div class="game-label"><span class="ic" id="gIcon"></span><h2 id="gTitle"></h2></div>
+    <p class="game-sub" id="gSub"></p>
+
+    <div class="stage">
+      <div class="counter hidden" id="gCounter"></div>
+      <div class="prompt placeholder" id="gPrompt">Bấm để bắt đầu</div>
+    </div>
+
+    <div class="controls">
+      <button class="draw" id="drawBtn" onclick="draw()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.2-8.5"/><path d="M21 3v6h-6"/></svg>
+        <span id="drawLabel">Rút quân bài</span>
+      </button>
+
+      <!-- slider -->
+      <div class="slider-wrap" id="uiSlider">
+        <div class="slider-val" id="sliderVal">5</div>
+        <input type="range" min="0" max="10" value="5" id="sliderInput">
+        <div class="slider-row"><span id="sliderLo">Hoàn toàn không</span><span id="sliderHi">Hoàn toàn có</span></div>
+      </div>
+
+      <!-- rank -->
+      <div class="rank-wrap" id="uiRank"></div>
+
+      <!-- binary -->
+      <div class="binary-wrap" id="uiBinary">
+        <button class="binary" id="binL" onclick="pickBinary('l')"></button>
+        <button class="binary" id="binR" onclick="pickBinary('r')"></button>
+      </div>
+
+      <!-- score -->
+      <div class="score-wrap" id="uiScore"></div>
+
+      <!-- flip -->
+      <div class="flip-answer" id="uiFlip"><span class="tag">Đáp án</span><span id="flipText"></span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const ICONS={
+  slider:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.5" fill="currentColor"/><circle cx="15" cy="16" r="2.5" fill="currentColor"/></svg>',
+  rank:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h10M4 12h7M4 18h13"/></svg>',
+  binary:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18"/><path d="M7 8 4 11l3 3M17 8l3 3-3 3"/></svg>',
+  score:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.5 6 6.5.5-5 4.3 1.6 6.4L12 17l-5.6 3.2L8 13.8 3 9.5 9.5 9z"/></svg>',
+  flip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>',
+  fill:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg>'
+};
+
+const GAMES = {
+  slider_tinh: {
+    type:'slider', icon:'slider',
+    title:'Kéo trái tim',
+    sub:'Một mệnh đề về tình cảm. Bạn kéo thanh trượt tới mức mình tin, rồi nói vì sao.',
+    lo:'Hoàn toàn không', hi:'Hoàn toàn đồng ý',
+    cards:[
+      "Nên tha thứ cho một người bạn từng phản bội lòng tin của mình.",
+      "Tình yêu thật sự thì không cần phải cố gắng nhiều.",
+      "Gia đình nên là nơi ta đặt ưu tiên cao hơn bạn bè.",
+      "Có thể yêu hai người cùng một lúc theo hai cách khác nhau.",
+      "Một tình bạn đẹp thì sống lâu hơn phần lớn các mối tình.",
+      "Người yêu nên là người bạn thân nhất của mình.",
+      "Cha mẹ có quyền can thiệp vào chuyện tình cảm của con cái đã trưởng thành.",
+      "Một mối quan hệ không có ghen tuông là một mối quan hệ thiếu đam mê.",
+      "Nên nói hết mọi bí mật của mình cho người yêu.",
+      "Yêu xa có thể bền vững nếu cả hai đủ quyết tâm.",
+      "Khoảng cách tuổi tác lớn không phải là vấn đề trong tình yêu.",
+      "Một người bạn thật sự sẽ luôn nói thẳng dù làm ta đau.",
+      "Nên duy trì liên lạc với người yêu cũ nếu đã từng rất thân.",
+      "Im lặng là cách tệ nhất để giải quyết mâu thuẫn trong tình cảm.",
+      "Tình yêu đến từ sự quen thuộc bền hơn tình yêu sét đánh.",
+      "Một gia đình hạnh phúc quan trọng hơn một sự nghiệp thành công.",
+      "Có thể thật sự quay lại như cũ sau một lần phản bội.",
+      "Nên ưu tiên cảm xúc của người mình yêu hơn cảm xúc của bản thân.",
+      "Bạn bè thời thơ ấu khó thay thế bằng bạn bè lúc trưởng thành.",
+      "Một người trưởng thành nên tự chữa lành tổn thương tình cảm mà không cần ai.",
+      "Tình yêu cần sự lãng mạn nhiều hơn là sự ổn định.",
+      "Nên hy sinh sự nghiệp vì người mình yêu nếu cần thiết.",
+      "Cãi nhau lành mạnh giúp một mối quan hệ bền chặt hơn.",
+      "Nên giữ một khoản tiền riêng mà người yêu không biết.",
+      "Một người yêu thật lòng sẽ chấp nhận quá khứ của bạn.",
+      "Tình thân ruột thịt luôn mạnh hơn tình bạn.",
+      "Có thể yêu một người mà không thật sự thích con người của họ.",
+      "Nên kết thúc một tình bạn đã trở nên độc hại dù lâu năm.",
+      "Người yêu nên biết hết mật khẩu điện thoại của nhau.",
+      "Sự chung thủy là điều kiện tiên quyết của tình yêu.",
+      "Nên tha thứ cho cha mẹ vì những tổn thương thời thơ ấu.",
+      "Một mối quan hệ cần được làm mới liên tục mới không nhàm chán.",
+      "Tình bạn khác giới thuần túy là điều có thật.",
+      "Nên nói ra cảm xúc tổn thương ngay cả khi sợ làm hỏng mối quan hệ.",
+      "Người ta có thể thay đổi vì tình yêu.",
+      "Nên giữ thể diện cho người yêu trước mặt người khác dù họ sai.",
+      "Một tình yêu đúng người sẽ khiến ta trở thành phiên bản tốt hơn.",
+      "Cha mẹ nên là người ta tâm sự đầu tiên khi gặp chuyện buồn.",
+      "Có thể hạnh phúc trọn vẹn khi sống độc thân cả đời.",
+      "Nên cho người yêu cơ hội thứ hai sau một lần làm tổn thương mình.",
+      "Tình cảm gia đình cần được vun đắp chứ không tự nhiên mà bền.",
+      "Một người bạn vắng mặt lúc khó khăn thì không xứng gọi là bạn.",
+      "Nên ưu tiên giữ gìn mối quan hệ hơn là chứng minh mình đúng.",
+      "Yêu một người là chấp nhận cả những điều mình không thích ở họ.",
+      "Khoảng cách địa lý làm phai nhạt mọi tình bạn theo thời gian.",
+      "Nên thẳng thắn từ chối khi bạn bè nhờ vả điều mình không muốn.",
+      "Một mối quan hệ tốt là khi hai người cho nhau không gian riêng.",
+      "Tình yêu thời nay mong manh hơn tình yêu của thế hệ trước.",
+      "Nên tha thứ nhưng không nhất thiết phải quên.",
+      "Người ta thường yêu người giống mình hơn là người bổ khuyết cho mình.",
+      "Một gia đình có thể tồn tại hạnh phúc mà thiếu sự gắn kết cảm xúc.",
+      "Nên đặt ranh giới rõ ràng với người thân khi cần thiết.",
+      "Tình bạn cần sự công bằng trong cho và nhận.",
+      "Có thể tin tưởng hoàn toàn một người sau khi họ từng nói dối.",
+      "Nên kết hôn vì tình yêu hơn là vì sự phù hợp.",
+      "Một người yêu lý tưởng phải hiểu mình mà không cần mình nói ra.",
+      "Sự tha thứ là món quà ta tặng cho chính mình nhiều hơn cho người kia.",
+      "Nên duy trì một mối quan hệ vì con cái dù tình cảm đã hết.",
+      "Bạn bè thật sự thì không cần gặp thường xuyên vẫn thân thiết.",
+      "Tình yêu cần được thể hiện bằng hành động hơn là lời nói.",
+      "Nên chia sẻ gánh nặng tài chính ngang nhau trong một mối quan hệ.",
+      "Một người trưởng thành nên hòa giải với cha mẹ trước khi quá muộn.",
+      "Có thể yêu ai đó mà vẫn giữ trọn vẹn sự độc lập của mình.",
+      "Nên ưu tiên người bạn đời hơn cha mẹ sau khi kết hôn.",
+      "Sự ghen tuông vừa phải là biểu hiện của tình yêu.",
+      "Một tình bạn lành mạnh thì không nên có sự đố kỵ.",
+      "Nên nói lời yêu thương với người thân ngay cả khi thấy ngại.",
+      "Người ta khó hạnh phúc trong tình yêu nếu chưa yêu được bản thân.",
+      "Nên giữ liên lạc với gia đình dù đã trưởng thành và sống xa.",
+      "Một lời xin lỗi chân thành đủ sức hàn gắn hầu hết mọi rạn nứt.",
+      "Tình cảm phai nhạt là điều tự nhiên không thể tránh khỏi.",
+      "Nên ở cạnh người khiến mình bình yên hơn người khiến mình rung động.",
+      "Có thể xây dựng một tình bạn sâu sắc chỉ qua mạng mà chưa từng gặp mặt.",
+      "Nên tôn trọng quyết định tình cảm của con cái dù không đồng tình.",
+      "Một mối quan hệ cần cả hai cùng trưởng thành thì mới đi xa.",
+      "Sự thấu hiểu quan trọng hơn sự đam mê trong một tình yêu lâu dài.",
+      "Nên buông bỏ một người mình yêu nếu họ không hạnh phúc bên mình.",
+      "Tình thân không phải lúc nào cũng đồng nghĩa với sự gắn bó.",
+      "Nên cho bản thân thời gian một mình sau một cuộc chia tay.",
+      "Một người bạn tốt là người vui thật lòng khi ta thành công.",
+      "Có thể yêu một người dù biết rõ tương lai không có nhau.",
+      "Nên thành thật về cảm xúc của mình ngay từ đầu mối quan hệ.",
+      "Gia đình là nơi ta có thể trở về dù có chuyện gì xảy ra.",
+      "Một tình yêu cần sự hy sinh từ cả hai phía mới công bằng.",
+      "Nên giữ những kỷ niệm đẹp về một người dù đã chia tay.",
+      "Người trưởng thành nên học cách yêu mà không phụ thuộc.",
+      "Có những tình bạn chỉ thuộc về một giai đoạn của cuộc đời.",
+      "Nên đối thoại thẳng thắn thay vì âm thầm chịu đựng trong tình cảm.",
+      "Một mối quan hệ healthy là khi cả hai đều được là chính mình.",
+      "Sự quan tâm nhỏ mỗi ngày quý hơn món quà lớn mỗi năm.",
+      "Nên tha thứ cho chính mình về những sai lầm trong quá khứ tình cảm.",
+      "Tình yêu đích thực thì vượt qua được thử thách của thời gian.",
+      "Nên đặt sức khỏe tinh thần của mình lên trên một mối quan hệ độc hại.",
+      "Một người bạn thân có thể hiểu ta hơn cả người yêu.",
+      "Có thể vừa yêu thương vừa thất vọng về gia đình mình cùng lúc.",
+      "Nên nói lời chia tay trực tiếp thay vì lặng lẽ biến mất.",
+      "Tình cảm chân thành thì không cần phải đo đếm thiệt hơn.",
+      "Nên trân trọng những người ở bên ta lúc ta chẳng có gì.",
+      "Một mối quan hệ bền vững được xây trên sự tôn trọng hơn là đam mê.",
+      "Nên cho người mình yêu thấy cả những lúc mình yếu đuối nhất."
+    ]
+  },
+  rank_da: {
+    type:'rank', icon:'rank',
+    title:'Xếp cho đúng',
+    sub:'Vài thứ hiện ra cùng lúc. Bạn kéo thả xếp thứ tự rồi lý giải lựa chọn.',
+    cards:[
+      {q:"Xếp các yếu tố giữ một mối quan hệ bền lâu, quan trọng nhất lên đầu:",items:["Tin tưởng","Sức hấp dẫn","Tài chính ổn","Chung giá trị sống","Gia đình ủng hộ"]},
+      {q:"Xếp thứ tự điều bạn muốn người khác nhớ về mình:",items:["Tử tế","Thông minh","Hài hước","Đáng tin","Truyền cảm hứng"]},
+      {q:"Xếp các thứ đáng đầu tư thời gian nhất ở tuổi 30:",items:["Sức khỏe","Sự nghiệp","Các mối quan hệ","Học hỏi","Tài chính"]},
+      {q:"Xếp điều khiến một lời xin lỗi trở nên chân thành:",items:["Thừa nhận cụ thể lỗi","Không bao biện","Thay đổi hành vi","Đúng thời điểm","Lắng nghe cảm xúc người kia"]},
+      {q:"Xếp các yếu tố làm nên một người sếp giỏi:",items:["Công bằng","Tầm nhìn","Biết lắng nghe","Quyết đoán","Bảo vệ nhân viên"]},
+      {q:"Xếp những điều khiến một cuộc trò chuyện trở nên thú vị:",items:["Lắng nghe thật sự","Hài hước","Hỏi đúng câu","Chia sẻ thật lòng","Im lặng đúng lúc"]},
+      {q:"Xếp các nguồn hạnh phúc bền vững nhất:",items:["Quan hệ thân thiết","Sức khỏe","Ý nghĩa cuộc sống","Tự do tài chính","Được công nhận"]},
+      {q:"Xếp những điều quan trọng khi chọn nơi để sống lâu dài:",items:["Gần người thân","Cơ hội việc làm","Chi phí sống","Môi trường yên bình","Tiện ích xung quanh"]},
+      {q:"Xếp các phẩm chất quan trọng nhất ở một người bạn đời:",items:["Cùng giá trị sống","Biết lắng nghe","Trách nhiệm","Hài hước","Tham vọng"]},
+      {q:"Xếp những điều khiến bạn tin tưởng một người:",items:["Giữ lời hứa","Nhất quán","Thành thật khi sai","Kín đáo","Đứng về phía bạn"]},
+      {q:"Xếp các kỹ năng đáng học nhất cho cuộc sống hiện đại:",items:["Quản lý cảm xúc","Giao tiếp","Quản lý tiền","Tư duy phản biện","Kỷ luật bản thân"]},
+      {q:"Xếp điều khiến một quyết định trở nên khó khăn:",items:["Sợ hối tiếc","Thiếu thông tin","Áp lực người khác","Đánh đổi quá lớn","Không biết mình muốn gì"]},
+      {q:"Xếp các dấu hiệu cho thấy bạn đã trưởng thành:",items:["Chịu trách nhiệm","Kiểm soát cảm xúc","Biết từ chối","Hết đổ lỗi","Chấp nhận khác biệt"]},
+      {q:"Xếp những thứ đáng bỏ tiền ra để có:",items:["Trải nghiệm","Thời gian rảnh","Sức khỏe","Sự tiện lợi","Kiến thức"]},
+      {q:"Xếp các yếu tố tạo nên một ngày thật sự tốt đẹp:",items:["Ngủ đủ giấc","Làm được việc ý nghĩa","Kết nối với ai đó","Vận động cơ thể","Có khoảng lặng riêng"]},
+      {q:"Xếp những điều khiến người ta hối tiếc nhất khi về già:",items:["Không dám sống thật","Làm việc quá nhiều","Mất liên lạc bạn bè","Không bày tỏ cảm xúc","Không cho mình hạnh phúc"]},
+      {q:"Xếp các yếu tố quan trọng khi bắt đầu một công việc mới:",items:["Đồng nghiệp tốt","Mức lương","Cơ hội học hỏi","Sếp giỏi","Cân bằng cuộc sống"]},
+      {q:"Xếp những điều nên dạy một đứa trẻ trước tiên:",items:["Lòng tử tế","Tính trung thực","Sự tự lập","Biết ơn","Kiên trì"]},
+      {q:"Xếp các cách hiệu quả nhất để vượt qua nỗi buồn:",items:["Chia sẻ với ai đó","Vận động","Cho mình thời gian","Làm việc mình thích","Viết ra cảm xúc"]},
+      {q:"Xếp những điều làm nên sức hút của một người:",items:["Sự tự tin","Khiếu hài hước","Lòng tốt","Trí tuệ","Sự bí ẩn"]},
+      {q:"Xếp các ưu tiên khi tài chính eo hẹp:",items:["Nhu cầu thiết yếu","Trả nợ","Tiết kiệm khẩn cấp","Sức khỏe","Đầu tư bản thân"]},
+      {q:"Xếp những điều quan trọng trong một tình bạn lâu năm:",items:["Sự chân thành","Không phán xét","Ở bên lúc khó","Giữ bí mật","Tôn trọng khác biệt"]},
+      {q:"Xếp các yếu tố khiến công việc trở nên ý nghĩa:",items:["Được tự chủ","Thấy tác động","Học hỏi liên tục","Được ghi nhận","Hợp giá trị bản thân"]},
+      {q:"Xếp những thói quen ảnh hưởng lớn nhất tới chất lượng sống:",items:["Giấc ngủ","Vận động","Ăn uống","Quan hệ xã hội","Thời gian màn hình"]},
+      {q:"Xếp các điều khiến một lời khuyên trở nên hữu ích:",items:["Hiểu hoàn cảnh","Không phán xét","Đúng thời điểm","Thực tế","Tôn trọng quyết định cuối"]},
+      {q:"Xếp những điều quan trọng nhất trong một cuộc hôn nhân:",items:["Sự tôn trọng","Giao tiếp","Chung mục tiêu","Hấp dẫn lẫn nhau","Hỗ trợ tài chính"]},
+      {q:"Xếp các lý do khiến người ta nghỉ việc:",items:["Sếp tệ","Lương thấp","Hết động lực","Môi trường độc hại","Không thăng tiến"]},
+      {q:"Xếp những điều làm nên một người lãnh đạo đáng theo:",items:["Chính trực","Truyền cảm hứng","Biết nhận lỗi","Quan tâm con người","Ra quyết định tốt"]},
+      {q:"Xếp các yếu tố giúp một thói quen mới duy trì được:",items:["Bắt đầu nhỏ","Có lý do rõ","Theo dõi tiến độ","Môi trường thuận lợi","Có người đồng hành"]},
+      {q:"Xếp những điều bạn cần để cảm thấy an toàn trong một mối quan hệ:",items:["Sự nhất quán","Được lắng nghe","Không bị phán xét","Lời hứa được giữ","Tự do là chính mình"]},
+      {q:"Xếp các thứ khó tha thứ nhất ở một người:",items:["Phản bội lòng tin","Nói dối liên tục","Vô ơn","Tàn nhẫn cố ý","Bỏ rơi lúc khó"]},
+      {q:"Xếp những điều quan trọng khi nuôi dạy con:",items:["Yêu thương vô điều kiện","Đặt ranh giới","Làm gương","Lắng nghe con","Cho con tự lập"]},
+      {q:"Xếp các cách tốt nhất để hiểu chính mình:",items:["Dành thời gian một mình","Viết nhật ký","Nghe phản hồi thật","Thử điều mới","Nhìn lại quá khứ"]},
+      {q:"Xếp những điều khiến một cuộc sống đáng giá:",items:["Yêu và được yêu","Sống có mục đích","Tự do lựa chọn","Sức khỏe","Để lại điều tốt đẹp"]},
+      {q:"Xếp các yếu tố quan trọng khi chọn bạn để chơi cùng:",items:["Cùng giá trị","Khiến mình tốt hơn","Vui vẻ","Đáng tin","Chấp nhận con người thật"]},
+      {q:"Xếp những điều nên ưu tiên khi còn trẻ:",items:["Học hỏi","Trải nghiệm","Xây quan hệ","Rèn sức khỏe","Tích lũy tài chính"]},
+      {q:"Xếp các dấu hiệu của một mối quan hệ độc hại:",items:["Kiểm soát","Hạ thấp nhau","Ghen tuông quá mức","Đổ lỗi một chiều","Cô lập khỏi người khác"]},
+      {q:"Xếp những điều khiến bạn nể phục một người:",items:["Kiên định với giá trị","Đối xử tốt với người yếu thế","Khiêm tốn","Dám nhận sai","Bền bỉ qua khó khăn"]},
+      {q:"Xếp các yếu tố làm nên một quyết định đúng đắn:",items:["Hợp giá trị bản thân","Cân nhắc hậu quả","Đủ thông tin","Lắng nghe trực giác","Không vì áp lực"]},
+      {q:"Xếp những thứ tiền bạc không mua được:",items:["Tình yêu chân thành","Sức khỏe thật sự","Thời gian đã mất","Sự bình an","Lòng tự trọng"]},
+      {q:"Xếp các cách hiệu quả để giải tỏa căng thẳng:",items:["Vận động","Ngủ đủ","Trò chuyện","Ở trong thiên nhiên","Làm điều sáng tạo"]},
+      {q:"Xếp những điều khiến người ta cảm thấy được yêu thương:",items:["Được lắng nghe","Được dành thời gian","Lời nói ấm áp","Cử chỉ quan tâm","Sự ủng hộ"]},
+      {q:"Xếp các yếu tố quan trọng khi xây dựng sự nghiệp lâu dài:",items:["Kỹ năng cốt lõi","Mạng lưới quan hệ","Danh tiếng","Khả năng thích nghi","Sức khỏe bền bỉ"]},
+      {q:"Xếp những điều cần buông bỏ để hạnh phúc hơn:",items:["Nỗi sợ bị phán xét","Quá khứ đau buồn","Sự cầu toàn","So sánh với người khác","Kỳ vọng không thực tế"]},
+      {q:"Xếp các phẩm chất đáng quý ở một đồng nghiệp:",items:["Đáng tin","Hợp tác tốt","Có trách nhiệm","Tích cực","Giỏi chuyên môn"]},
+      {q:"Xếp những điều làm nên một gia đình ấm áp:",items:["Sự an toàn","Được lắng nghe","Cùng nhau ăn cơm","Tôn trọng riêng tư","Tha thứ cho nhau"]},
+      {q:"Xếp các yếu tố khiến bạn gắn bó với một nơi làm việc:",items:["Đồng nghiệp","Ý nghĩa công việc","Được phát triển","Lương thưởng","Văn hóa công ty"]},
+      {q:"Xếp những điều quan trọng nhất ở tuổi 40:",items:["Sức khỏe","Gia đình","Sự bình an nội tâm","Tài chính vững","Bạn bè thật"]},
+      {q:"Xếp các cách thể hiện sự trưởng thành trong xung đột:",items:["Lắng nghe trước","Không công kích cá nhân","Thừa nhận phần sai","Tìm giải pháp chung","Biết khi nào dừng"]},
+      {q:"Xếp những điều khiến một lời hứa đáng tin:",items:["Khả thi","Cụ thể","Người hứa nhất quán","Có cam kết rõ","Từng giữ lời trước đó"]},
+      {q:"Xếp các yếu tố khiến bạn tự hào về bản thân:",items:["Sống đúng giá trị","Vượt qua khó khăn","Giúp được người khác","Không ngừng học hỏi","Giữ được sự tử tế"]},
+      {q:"Xếp những thứ đáng để liều lĩnh vì nó:",items:["Tình yêu thật","Ước mơ lớn","Sự tự do","Người mình thương","Lẽ phải"]},
+      {q:"Xếp các điều khiến một cuộc trò chuyện trở nên ý nghĩa:",items:["Sự chân thật","Được thấu hiểu","Cùng cười","Học được điều mới","Cảm thấy gần nhau hơn"]},
+      {q:"Xếp những yếu tố giúp vượt qua một giai đoạn khủng hoảng:",items:["Người thân bên cạnh","Niềm tin vào bản thân","Một mục tiêu để bám","Sự kiên nhẫn","Biết tìm trợ giúp"]},
+      {q:"Xếp các phẩm chất bạn muốn truyền cho con cái:",items:["Lòng nhân hậu","Sự can đảm","Tính trung thực","Khả năng tự lập","Biết yêu thương"]},
+      {q:"Xếp những điều khiến bạn tôn trọng một mối quan hệ:",items:["Sự bình đẳng","Không gian riêng","Cùng phát triển","Trung thực","Ủng hộ lẫn nhau"]},
+      {q:"Xếp các thứ cần cân bằng trong cuộc sống:",items:["Công việc","Gia đình","Sức khỏe","Bản thân","Các mối quan hệ"]},
+      {q:"Xếp những điều làm nên một người đáng tin cậy:",items:["Giữ lời","Kín miệng","Nhất quán","Trung thực khi khó","Không lợi dụng"]},
+      {q:"Xếp các yếu tố giúp một cuộc tranh luận lành mạnh:",items:["Tôn trọng đối phương","Lắng nghe để hiểu","Tập trung vấn đề","Cởi mở đổi ý","Giữ bình tĩnh"]},
+      {q:"Xếp những điều bạn sợ mất nhất:",items:["Người thân yêu","Sức khỏe","Tự do","Lòng tự trọng","Ký ức"]},
+      {q:"Xếp các cách tốt nhất để chữa lành sau chia tay:",items:["Cho mình thời gian","Kết nối bạn bè","Tập trung vào bản thân","Học từ trải nghiệm","Tránh níu kéo"]},
+      {q:"Xếp những điều khiến bạn cảm thấy sống có ý nghĩa:",items:["Được kết nối","Tạo ra giá trị","Phát triển bản thân","Giúp đỡ người khác","Sống đúng với mình"]},
+      {q:"Xếp các yếu tố quan trọng khi chọn người để kết hôn:",items:["Cách họ đối xử lúc giận","Chung tầm nhìn cuộc sống","Sự tin cậy","Khả năng giao tiếp","Cách xử lý tiền bạc"]},
+      {q:"Xếp những thói quen âm thầm phá hủy hạnh phúc:",items:["So sánh bản thân","Ôm giận lâu","Cầu toàn quá mức","Bỏ bê sức khỏe","Trì hoãn điều quan trọng"]},
+      {q:"Xếp các điều khiến một người trở nên hấp dẫn theo thời gian:",items:["Sự tử tế","Trí tuệ","Tính hài hước","Đáng tin cậy","Đam mê sống"]},
+      {q:"Xếp những điều nên làm khi cảm thấy lạc lối:",items:["Dừng lại nghĩ","Nói chuyện với người tin tưởng","Quay về giá trị cốt lõi","Thử điều nhỏ mới","Cho mình nghỉ ngơi"]},
+      {q:"Xếp các yếu tố tạo nên sự tự tin thật sự:",items:["Hiểu rõ bản thân","Vượt qua thử thách","Chấp nhận khuyết điểm","Không cần người khác công nhận","Có năng lực thật"]},
+      {q:"Xếp những điều quan trọng trong một tình bạn người lớn:",items:["Tôn trọng thời gian nhau","Không cạnh tranh","Thành thật","Hiện diện khi cần","Cùng trưởng thành"]},
+      {q:"Xếp các thứ đáng đầu tư cho bản thân:",items:["Sức khỏe","Kiến thức","Kỹ năng","Sức khỏe tinh thần","Trải nghiệm"]},
+      {q:"Xếp những điều làm nên một quyết định nghề nghiệp khôn ngoan:",items:["Hợp năng lực","Hợp đam mê","Triển vọng tương lai","Mức sống đảm bảo","Cân bằng cuộc sống"]},
+      {q:"Xếp các cách hiệu quả để xây dựng lòng tin:",items:["Nhất quán theo thời gian","Giữ lời hứa","Thành thật cả khi khó","Lắng nghe","Đáng tin trong việc nhỏ"]},
+      {q:"Xếp những điều khiến tuổi trẻ đáng nhớ:",items:["Những mối quan hệ","Dám liều lĩnh","Học từ sai lầm","Khám phá bản thân","Sống hết mình"]},
+      {q:"Xếp các yếu tố giúp một mối quan hệ vượt qua khủng hoảng:",items:["Sẵn sàng đối thoại","Cùng cam kết","Tha thứ","Thay đổi thật sự","Kiên nhẫn"]},
+      {q:"Xếp những điều bạn muốn cải thiện ở bản thân:",items:["Quản lý cảm xúc","Kỷ luật","Giao tiếp","Sức khỏe","Sự kiên nhẫn"]},
+      {q:"Xếp các phẩm chất của một người bạn đời lý tưởng:",items:["Thấu hiểu","Trách nhiệm","Cùng chí hướng","Biết quan tâm","Trưởng thành cảm xúc"]},
+      {q:"Xếp những điều khiến một công việc trở nên không thể chịu nổi:",items:["Sếp độc hại","Bị xem thường","Quá tải triền miên","Không ý nghĩa","Bất công"]},
+      {q:"Xếp các cách tốt nhất để giữ một tình yêu tươi mới:",items:["Dành thời gian chất lượng","Thử điều mới cùng nhau","Bày tỏ trân trọng","Giữ sự lãng mạn","Tôn trọng không gian riêng"]},
+      {q:"Xếp những điều quan trọng khi đối mặt thất bại:",items:["Chấp nhận cảm xúc","Rút bài học","Không tự dằn vặt mãi","Đứng dậy thử lại","Tìm chỗ dựa"]},
+      {q:"Xếp các yếu tố tạo nên uy tín cá nhân:",items:["Năng lực thật","Nhất quán","Chính trực","Giữ lời","Đối xử công bằng"]},
+      {q:"Xếp những điều bạn trân trọng nhất ở cha mẹ:",items:["Sự hy sinh","Tình yêu thương","Những bài học","Sự bao dung","Làm gương"]},
+      {q:"Xếp các thứ khiến một ngày trở nên tồi tệ:",items:["Mất ngủ","Mâu thuẫn với người thân","Áp lực dồn dập","Cảm giác vô nghĩa","Bị hiểu lầm"]},
+      {q:"Xếp những điều nên ưu tiên khi sức khỏe đi xuống:",items:["Nghỉ ngơi","Khám chữa kịp thời","Điều chỉnh lối sống","Giảm căng thẳng","Nhờ người hỗ trợ"]},
+      {q:"Xếp các yếu tố giúp con người thay đổi thật sự:",items:["Tự nhận ra vấn đề","Có động lực mạnh","Hành động cụ thể","Môi trường ủng hộ","Kiên trì lâu dài"]},
+      {q:"Xếp những điều làm nên một cuộc đối thoại khó nhưng cần thiết:",items:["Chọn đúng lúc","Nói thật nhẹ nhàng","Lắng nghe phản hồi","Giữ tôn trọng","Hướng tới giải pháp"]},
+      {q:"Xếp các điều bạn muốn để lại cho thế hệ sau:",items:["Giá trị sống","Tình yêu thương","Bài học kinh nghiệm","Một thế giới tốt hơn","Ký ức đẹp"]},
+      {q:"Xếp những thứ khiến bạn cảm thấy bình yên:",items:["Ở bên người thân","Thiên nhiên","Khoảng lặng một mình","Làm điều mình thích","Cảm giác đủ đầy"]},
+      {q:"Xếp các yếu tố quan trọng khi xây dựng thương hiệu cá nhân:",items:["Sự chân thật","Giá trị rõ ràng","Nhất quán","Năng lực thật","Kết nối cảm xúc"]},
+      {q:"Xếp những điều khiến bạn muốn gắn bó với một người lâu dài:",items:["Cảm giác bình yên","Sự tin tưởng","Cùng nhìn về một hướng","Được là chính mình","Sự trân trọng"]},
+      {q:"Xếp các cách tốt để đối phó với người khó tính:",items:["Giữ bình tĩnh","Đặt ranh giới","Không cá nhân hóa","Tìm điểm chung","Biết khi nào rút lui"]},
+      {q:"Xếp những điều quan trọng để già đi một cách an yên:",items:["Sức khỏe","Quan hệ thân thiết","Sự bình an nội tâm","Tài chính đủ dùng","Mục đích sống"]},
+      {q:"Xếp các phẩm chất khiến một người được yêu mến:",items:["Tử tế","Chân thành","Hài hước","Biết lắng nghe","Đáng tin"]},
+      {q:"Xếp những điều bạn cần để cảm thấy thành công:",items:["Hài lòng với bản thân","Được công nhận","Tự do tài chính","Quan hệ tốt đẹp","Sống có ý nghĩa"]},
+      {q:"Xếp các yếu tố giúp một đứa trẻ lớn lên hạnh phúc:",items:["Được yêu thương","Cảm giác an toàn","Được lắng nghe","Có ranh giới rõ","Được tự do khám phá"]},
+      {q:"Xếp những điều quan trọng khi tha thứ cho ai đó:",items:["Họ thật lòng hối lỗi","Họ thay đổi hành vi","Mình sẵn sàng buông","Vì sự bình an của mình","Mối quan hệ đáng giữ"]},
+      {q:"Xếp các thứ làm nên một buổi tối đáng nhớ:",items:["Người cùng đi","Câu chuyện hay","Không khí","Cảm xúc thật","Sự bất ngờ"]},
+      {q:"Xếp những điều bạn muốn ưu tiên trong năm tới:",items:["Sức khỏe","Phát triển bản thân","Các mối quan hệ","Tài chính","Sự cân bằng"]},
+      {q:"Xếp các yếu tố khiến một lời từ chối trở nên tử tế:",items:["Rõ ràng","Không vòng vo","Tôn trọng người kia","Đúng thời điểm","Không kèm cảm giác tội lỗi"]},
+      {q:"Xếp những điều khiến bạn tin một mối quan hệ sẽ bền:",items:["Cách xử lý mâu thuẫn","Sự tôn trọng hàng ngày","Cùng giá trị","Tin tưởng nhau","Cùng nỗ lực"]},
+      {q:"Xếp các thứ đáng học từ những thất bại trong quá khứ:",items:["Hiểu giới hạn bản thân","Biết điều mình thật sự muốn","Cách đứng dậy","Ai thật sự bên mình","Sự khiêm tốn"]},
+      {q:"Xếp những phẩm chất bạn ngưỡng mộ nhất ở người khác:",items:["Lòng can đảm","Sự tử tế","Trí tuệ","Tính kiên định","Khả năng vượt nghịch cảnh"]}
+    ]
+  },
+  binary_career: {
+    type:'binary', icon:'binary',
+    title:'Một trong hai: Đời',
+    sub:'Hai con đường, chọn một. Sự nghiệp, đam mê, hay là chính mình.',
+    cards:[
+      {l:"Lương cao, việc chán",r:"Lương vừa, việc mê"},
+      {l:"Ổn định cả đời",r:"Bấp bênh nhưng tự do"},
+      {l:"Giỏi một thứ thật sâu",r:"Biết nhiều thứ vừa đủ"},
+      {l:"Được nể nhưng cô đơn",r:"Được thương nhưng bị xem thường"},
+      {l:"Thành công sớm rồi chững lại",r:"Chậm mà bền tới cuối"},
+      {l:"Làm sếp của chính mình",r:"Làm thuê nhưng nhẹ đầu"},
+      {l:"Công việc danh giá",r:"Công việc tự do giờ giấc"},
+      {l:"Theo đuổi đam mê rủi ro",r:"Chọn nghề an toàn ổn định"},
+      {l:"Nổi tiếng nhưng mất riêng tư",r:"Vô danh nhưng bình yên"},
+      {l:"Học từ thất bại của mình",r:"Học từ thành công của người"},
+      {l:"Làm việc mình giỏi",r:"Làm việc mình thích"},
+      {l:"Giàu nhưng bận rộn triền miên",r:"Đủ sống nhưng nhiều thời gian"},
+      {l:"Một sự nghiệp rực rỡ ngắn ngủi",r:"Một sự nghiệp âm thầm dài lâu"},
+      {l:"Được trả công xứng đáng",r:"Được làm điều có ý nghĩa"},
+      {l:"Đi nhanh một mình",r:"Đi xa cùng đồng đội"},
+      {l:"Chuyên gia trong một lĩnh vực",r:"Người kết nối nhiều lĩnh vực"},
+      {l:"Làm việc mình kiểm soát được",r:"Làm việc đầy thử thách mới"},
+      {l:"Sống để làm việc",r:"Làm việc để sống"},
+      {l:"Theo kế hoạch mười năm",r:"Tùy cơ ứng biến từng năm"},
+      {l:"Được khen ngợi thường xuyên",r:"Được trao quyền tự quyết"},
+      {l:"Một công việc bạn tự hào",r:"Một công việc trả lương hậu hĩnh"},
+      {l:"Mạo hiểm khởi nghiệp",r:"An toàn leo nấc thang công ty"},
+      {l:"Biết rõ mình muốn gì",r:"Mở lòng với mọi khả năng"},
+      {l:"Thành công theo chuẩn xã hội",r:"Thành công theo chuẩn riêng mình"},
+      {l:"Làm nhiều việc cùng lúc",r:"Tập trung làm tốt một việc"},
+      {l:"Được làm việc với người giỏi",r:"Được làm việc với người tử tế"},
+      {l:"Đổi nghề ở tuổi 40",r:"Gắn bó nghề cũ tới cùng"},
+      {l:"Sự nghiệp đầy biến động thú vị",r:"Sự nghiệp đều đặn dễ đoán"},
+      {l:"Được tự do sáng tạo",r:"Được hướng dẫn rõ ràng"},
+      {l:"Làm điều lớn lao nhưng áp lực",r:"Làm điều nhỏ bé mà thanh thản"},
+      {l:"Tiền nhiều, ít ngủ",r:"Ngủ ngon, tiền vừa"},
+      {l:"Được nhớ đến sau khi mất",r:"Được tận hưởng lúc còn sống"},
+      {l:"Một mentor khắt khe",r:"Một mentor dịu dàng"},
+      {l:"Phát triển nhanh trong áp lực",r:"Phát triển chậm trong thoải mái"},
+      {l:"Theo ngành hot dễ kiếm tiền",r:"Theo ngành mình thật sự tò mò"},
+      {l:"Làm việc tại quê nhà",r:"Làm việc ở thành phố lớn"},
+      {l:"Có quyền lực nhưng nhiều kẻ thù",r:"Khiêm tốn nhưng được quý mến"},
+      {l:"Biết giới hạn của mình",r:"Luôn thử vượt giới hạn"},
+      {l:"Một công việc dạy bạn nhiều",r:"Một công việc trả bạn nhiều"},
+      {l:"Được người đời ngưỡng mộ",r:"Được chính mình hài lòng"},
+      {l:"Liều một phen lớn",r:"Chắc từng bước nhỏ"},
+      {l:"Sự nghiệp do mình chọn",r:"Sự nghiệp gia đình mong muốn"},
+      {l:"Làm việc đam mê không công",r:"Làm việc nhạt nhẽo lương cao"},
+      {l:"Được tôn trọng vì năng lực",r:"Được yêu mến vì tính cách"},
+      {l:"Một cuộc đời nhiều trải nghiệm",r:"Một cuộc đời nhiều thành tựu"},
+      {l:"Học cả đời không ngừng",r:"Thành thạo rồi an hưởng"},
+      {l:"Dẫn đầu một đội nhỏ",r:"Là thành viên đội lớn mạnh"},
+      {l:"Theo đuổi sự hoàn hảo",r:"Chấp nhận đủ tốt là được"},
+      {l:"Nổi bật giữa đám đông",r:"Âm thầm làm chủ cuộc chơi"},
+      {l:"Cơ hội đổi đời rủi ro cao",r:"Thu nhập đều đặn rủi ro thấp"},
+      {l:"Làm điều mình tin là đúng",r:"Làm điều khiến mọi người vui"},
+      {l:"Một tuổi trẻ cống hiến hết mình",r:"Một tuổi trẻ cân bằng tận hưởng"},
+      {l:"Được tự do nhưng cô độc",r:"Bị ràng buộc nhưng có đồng đội"},
+      {l:"Giữ vững nguyên tắc dù thiệt",r:"Linh hoạt để có lợi"},
+      {l:"Thành công mà ít người biết",r:"Tai tiếng mà nhiều người nhớ"},
+      {l:"Một công việc bạn kiểm soát",r:"Một công việc luôn bất ngờ"},
+      {l:"Phát triển bản thân âm thầm",r:"Chia sẻ hành trình công khai"},
+      {l:"Đầu tư cho tương lai xa",r:"Tận hưởng thành quả hiện tại"},
+      {l:"Một nghề được trọng vọng",r:"Một nghề khiến bạn hào hứng mỗi sáng"},
+      {l:"Làm chủ thời gian của mình",r:"Làm chủ thu nhập của mình"},
+      {l:"Sống đúng với đam mê thời trẻ",r:"Trưởng thành chọn lại đam mê mới"},
+      {l:"Được dẫn dắt bởi người giỏi",r:"Tự mò mẫm tìm đường riêng"},
+      {l:"Một thành tựu để đời",r:"Nhiều niềm vui mỗi ngày"},
+      {l:"Theo số đông cho an toàn",r:"Đi ngược dòng cho khác biệt"},
+      {l:"Được trả lương để chờ đợi",r:"Tự bỏ tiền để theo đuổi"},
+      {l:"Giỏi nhưng khiêm tốn ít ai biết",r:"Vừa đủ nhưng biết tự quảng bá"},
+      {l:"Một công việc cho bạn danh tiếng",r:"Một công việc cho bạn bình an"},
+      {l:"Chấp nhận rủi ro để học",r:"Chọn chắc chắn để yên tâm"},
+      {l:"Sống vì mục tiêu lớn",r:"Sống trọn từng khoảnh khắc"},
+      {l:"Được nhiều người cần đến",r:"Được tự do không ràng buộc"},
+      {l:"Một sự nghiệp do mình xây",r:"Một di sản được thừa hưởng"},
+      {l:"Theo đuổi tiền trước, mơ ước sau",r:"Theo mơ ước trước, tiền tính sau"},
+      {l:"Làm việc với deadline gắt gao",r:"Làm việc tự do không áp lực"},
+      {l:"Một kỹ năng hiếm và sâu",r:"Nhiều kỹ năng phổ thông và rộng"},
+      {l:"Được công nhận muộn nhưng xứng đáng",r:"Được tung hô sớm nhưng mau quên"},
+      {l:"Sống ở nơi tiện nghi nhưng xa lạ",r:"Sống ở nơi giản dị mà thân quen"},
+      {l:"Một công việc thay đổi thế giới",r:"Một công việc thay đổi đời bạn"},
+      {l:"Chọn ổn định cho gia đình",r:"Chọn phiêu lưu cho bản thân"},
+      {l:"Được dạy lại điều mình giỏi",r:"Tiếp tục thực hành điều mình mê"},
+      {l:"Một danh tiếng lớn áp lực lớn",r:"Một cuộc sống nhỏ nhẹ nhàng"},
+      {l:"Làm điều khó mà có ích",r:"Làm điều dễ mà vui"},
+      {l:"Đặt cược vào tài năng của mình",r:"Dựa vào sự chăm chỉ bền bỉ"},
+      {l:"Một công việc nhiều tiền ít nghĩa",r:"Một công việc ít tiền nhiều nghĩa"},
+      {l:"Được sống ở đỉnh cao ngắn ngủi",r:"Được sống ổn định lâu dài"},
+      {l:"Tự do thử và sai",r:"An toàn làm đúng ngay"},
+      {l:"Một sự nghiệp khiến bạn tự hào",r:"Một sự nghiệp khiến bạn an nhàn"},
+      {l:"Được nhớ vì một điều vĩ đại",r:"Được yêu vì nhiều điều nhỏ bé"},
+      {l:"Đi theo tiếng gọi con tim",r:"Nghe theo lý trí tỉnh táo"},
+      {l:"Một công việc bận rộn ý nghĩa",r:"Một công việc nhàn nhã trống rỗng"},
+      {l:"Thành công nhờ may mắn lớn",r:"Thành công nhờ nỗ lực bền"},
+      {l:"Được làm điều mình tin tưởng",r:"Được trả công cao gấp bội"},
+      {l:"Một mình gánh vác tất cả",r:"Chia sẻ thành quả lẫn rủi ro"},
+      {l:"Sống cuộc đời an toàn không hối tiếc gì lớn",r:"Sống cuộc đời mạo hiểm đầy câu chuyện"},
+      {l:"Theo đuổi sự công nhận",r:"Theo đuổi sự bình thản"},
+      {l:"Một đỉnh cao rồi đi xuống",r:"Một đường đi lên đều đặn"},
+      {l:"Được tự quyết mọi thứ",r:"Được hỗ trợ mọi lúc"},
+      {l:"Làm việc vì lý tưởng",r:"Làm việc vì gia đình"},
+      {l:"Một cái tên người đời nhớ",r:"Một cuộc đời mình thấy đáng"},
+      {l:"Được chọn việc mình yêu",r:"Được giỏi việc mình chọn"},
+      {l:"Một hành trình gập ghềnh đáng nhớ",r:"Một con đường bằng phẳng dễ đi"}
+    ]
+  },
+  binary_tinh: {
+    type:'binary', icon:'binary',
+    title:'Một trong hai: Tình',
+    sub:'Hai lựa chọn của con tim. Không có đáp án đúng, chỉ có bạn là ai.',
+    cards:[
+      {l:"Yêu người yêu mình nhiều hơn",r:"Yêu người mình yêu nhiều hơn"},
+      {l:"Người bạn tri kỷ",r:"Người yêu nồng nhiệt"},
+      {l:"Sự thật làm đau",r:"Lời nói dối làm yên lòng"},
+      {l:"Chia tay trong êm đẹp",r:"Níu kéo một lần cuối"},
+      {l:"Gần gia đình, xa đam mê",r:"Theo đam mê, xa gia đình"},
+      {l:"Một tình yêu cháy bỏng ngắn ngủi",r:"Một tình yêu ấm áp dài lâu"},
+      {l:"Được yêu vì con người thật",r:"Được yêu vì hình ảnh hoàn hảo"},
+      {l:"Tha thứ rồi quên",r:"Tha thứ nhưng nhớ"},
+      {l:"Người luôn ở bên",r:"Người luôn thấu hiểu"},
+      {l:"Yêu xa nhưng chung thủy",r:"Yêu gần nhưng nhiều cám dỗ"},
+      {l:"Biết sự thật đau lòng",r:"Sống trong hạnh phúc giả"},
+      {l:"Một người bạn cả đời",r:"Nhiều người bạn từng giai đoạn"},
+      {l:"Nói ra để được nhẹ lòng",r:"Im lặng để giữ bình yên"},
+      {l:"Yêu một người hoàn hảo nhưng xa cách",r:"Yêu một người nhiều lỗi nhưng ấm áp"},
+      {l:"Được cầu hôn lãng mạn",r:"Được hứa hẹn chân thành"},
+      {l:"Một mối tình đầu khó quên",r:"Một tình yêu cuối bình yên"},
+      {l:"Người làm tim đập nhanh",r:"Người làm lòng yên ả"},
+      {l:"Gia đình hòa thuận nhưng xa cách",r:"Gia đình hay cãi nhưng gắn bó"},
+      {l:"Yêu trong im lặng",r:"Tỏ tình rồi chấp nhận mất bạn"},
+      {l:"Một người hiểu mình không cần nói",r:"Một người luôn hỏi mình cần gì"},
+      {l:"Chấp nhận quá khứ của người yêu",r:"Không bao giờ biết về quá khứ đó"},
+      {l:"Tình bạn không vụ lợi",r:"Tình yêu có toan tính"},
+      {l:"Người yêu là tất cả thế giới",r:"Người yêu là một phần thế giới"},
+      {l:"Buông tay để họ hạnh phúc",r:"Giữ chặt vì mình cần họ"},
+      {l:"Một cuộc tình đầy nước mắt mà thật",r:"Một cuộc tình êm đềm mà nhạt"},
+      {l:"Được tỏ tình",r:"Được chủ động tỏ tình"},
+      {l:"Người yêu giống mình",r:"Người yêu bổ khuyết cho mình"},
+      {l:"Hàn gắn rạn nứt cũ",r:"Bắt đầu một khởi đầu mới"},
+      {l:"Yêu bằng lý trí",r:"Yêu bằng con tim"},
+      {l:"Một gia đình đông vui ồn ào",r:"Một gia đình nhỏ yên tĩnh"},
+      {l:"Người luôn khen mình",r:"Người dám nói thật với mình"},
+      {l:"Sống cạnh người mình yêu nhưng nghèo",r:"Sống xa người mình yêu nhưng đủ đầy"},
+      {l:"Tình yêu cần tự do",r:"Tình yêu cần cam kết"},
+      {l:"Được nhớ mãi sau chia tay",r:"Được quên đi nhẹ nhàng"},
+      {l:"Một người bạn thẳng thắn",r:"Một người bạn dịu dàng"},
+      {l:"Yêu người gia đình chấp nhận",r:"Yêu người mình thật sự muốn"},
+      {l:"Biết mình được yêu",r:"Tin rằng mình được yêu"},
+      {l:"Một tình yêu nhiều thử thách",r:"Một tình yêu phẳng lặng"},
+      {l:"Người chia sẻ mọi bí mật",r:"Người tôn trọng khoảng riêng"},
+      {l:"Hối hận vì đã yêu",r:"Hối hận vì không dám yêu"},
+      {l:"Được an ủi bằng lời",r:"Được ở bên trong im lặng"},
+      {l:"Một người bạn lâu năm xa cách dần",r:"Một người bạn mới mà hợp"},
+      {l:"Tha thứ cho người làm mình đau",r:"Giữ khoảng cách để tự bảo vệ"},
+      {l:"Yêu hết mình rồi tổn thương",r:"Giữ lại một phần để an toàn"},
+      {l:"Người yêu nhiệt thành nhưng thất thường",r:"Người yêu điềm đạm nhưng đều đặn"},
+      {l:"Gặp lại người cũ một lần",r:"Để quá khứ ngủ yên mãi"},
+      {l:"Được người thân hiểu mình",r:"Được người thân ủng hộ mình"},
+      {l:"Một tình yêu khiến mình mạnh mẽ",r:"Một tình yêu khiến mình mềm lòng"},
+      {l:"Nói lời yêu mỗi ngày",r:"Thể hiện bằng hành động lặng lẽ"},
+      {l:"Chấp nhận một người không hoàn hảo",r:"Chờ đợi một người lý tưởng"},
+      {l:"Tình thân ruột thịt",r:"Tình bạn tri kỷ"},
+      {l:"Người làm mình cười",r:"Người ôm mình khi khóc"},
+      {l:"Yêu rồi mất còn hơn chưa từng yêu",r:"Thà chưa từng yêu để khỏi đau"},
+      {l:"Một cuộc hôn nhân vì tình",r:"Một cuộc hôn nhân vì hợp"},
+      {l:"Được tha thứ",r:"Được thấu hiểu vì sao mình sai"},
+      {l:"Người luôn ưu tiên mình",r:"Người có cuộc sống riêng phong phú"},
+      {l:"Một mối quan hệ nồng nhiệt mệt mỏi",r:"Một mối quan hệ nhẹ nhàng nhạt nhẽo"},
+      {l:"Sống thật với cảm xúc dù làm người khác buồn",r:"Giấu cảm xúc để giữ hòa khí"},
+      {l:"Người yêu đầu tiên",r:"Người yêu cuối cùng"},
+      {l:"Một gia đình giàu mà lạnh nhạt",r:"Một gia đình nghèo mà ấm áp"},
+      {l:"Được người khác yêu say đắm",r:"Yêu người khác say đắm"},
+      {l:"Giữ một tình bạn cũ đang phai",r:"Buông để cả hai nhẹ nhõm"},
+      {l:"Người yêu lãng mạn vụng về",r:"Người yêu thực tế chu đáo"},
+      {l:"Biết người mình yêu từng yêu sâu đậm ai khác",r:"Không bao giờ biết điều đó"},
+      {l:"Một tình yêu cả hai cùng cố gắng",r:"Một tình yêu tự nhiên không gắng sức"},
+      {l:"Người hiểu nỗi buồn của mình",r:"Người làm mình quên nỗi buồn"},
+      {l:"Tỏ tình và bị từ chối",r:"Giữ mãi trong lòng không nói"},
+      {l:"Được gia đình lo cho mọi thứ",r:"Tự lập nhưng được tôn trọng"},
+      {l:"Một người yêu cuồng nhiệt",r:"Một người bạn đời điềm tĩnh"},
+      {l:"Tha thứ để giải thoát mình",r:"Giữ giận để nhớ bài học"},
+      {l:"Yêu một người ở xa lý tưởng",r:"Yêu một người bên cạnh bình thường"},
+      {l:"Được khóc trên vai ai đó",r:"Tự mình lau nước mắt"},
+      {l:"Một mối tình nhiều kỷ niệm đẹp",r:"Một mối tình ít sóng gió"},
+      {l:"Người yêu là chỗ dựa",r:"Người yêu là người đồng hành ngang bằng"},
+      {l:"Chia tay người mình còn yêu",r:"Ở lại với người mình hết yêu"},
+      {l:"Sống gần con cái khi về già",r:"Sống tự do một mình khi về già"},
+      {l:"Được người yêu ghen vì quan tâm",r:"Được người yêu tin tưởng tuyệt đối"},
+      {l:"Một tình bạn sâu mà ít gặp",r:"Một tình bạn thường mà hay gặp"},
+      {l:"Yêu người làm mình tốt hơn",r:"Yêu người làm mình hạnh phúc hơn"},
+      {l:"Nói ra điều khó nói",r:"Để nó trôi qua trong im lặng"},
+      {l:"Một người bạn đời cùng tham vọng",r:"Một người bạn đời cùng an yên"},
+      {l:"Được yêu nồng nàn rồi nguội lạnh",r:"Được yêu đều đặn không cao trào"},
+      {l:"Hàn gắn với người thân sau mâu thuẫn",r:"Giữ khoảng cách cho cả hai dễ thở"},
+      {l:"Yêu một người giống mình hoàn toàn",r:"Yêu một người khác mình thú vị"},
+      {l:"Được người yêu chiều chuộng",r:"Được người yêu thử thách trưởng thành"},
+      {l:"Một cuộc tình ai cũng ngưỡng mộ",r:"Một cuộc tình chỉ hai người hiểu"},
+      {l:"Biết rõ cảm xúc của người yêu",r:"Giữ chút bí ẩn cho nhau"},
+      {l:"Tình yêu khiến mình rung động",r:"Tình yêu khiến mình bình yên"},
+      {l:"Được tha thứ ngay",r:"Được cho thời gian chuộc lỗi"},
+      {l:"Một gia đình theo truyền thống",r:"Một gia đình theo cách riêng mình"},
+      {l:"Người yêu nói lời ngọt ngào",r:"Người yêu giữ lời đã hứa"},
+      {l:"Sống vì người mình thương",r:"Sống cho chính mình rồi mới thương"},
+      {l:"Một tình bạn không bao giờ phản bội",r:"Một tình yêu sẵn sàng hy sinh"},
+      {l:"Được người yêu hiểu mà không cần giải thích",r:"Được người yêu kiên nhẫn lắng nghe mình giải thích"},
+      {l:"Yêu trong giới hạn an toàn",r:"Yêu liều lĩnh hết mình"},
+      {l:"Một người luôn đồng ý với mình",r:"Một người dám phản biện mình"},
+      {l:"Giữ liên lạc với người yêu cũ",r:"Cắt đứt hoàn toàn để bước tiếp"},
+      {l:"Một cuộc đời nhiều người thương",r:"Một cuộc đời một người thương trọn vẹn"},
+      {l:"Được người thân tự hào",r:"Được người thân chấp nhận con người thật"},
+      {l:"Tình yêu là cho đi",r:"Tình yêu là sẻ chia hai chiều"}
+    ]
+  },
+  score_tinh: {
+    type:'score', icon:'score',
+    title:'Giám khảo: Tình',
+    sub:'Một câu nói về tình cảm hiện ra. Bạn chấm thang 10, khán giả đoán điểm trước.',
+    cards:[
+      "Lời tỏ tình: \"Anh không giỏi nói hay, nhưng anh chắc chắn về em.\"",
+      "Lý do chia tay: \"Anh thấy tụi mình hợp làm bạn hơn.\"",
+      "Câu mở đầu nhắn tin làm quen: \"Hình như mình gặp nhau ở đâu rồi thì phải?\"",
+      "Lời dỗ người yêu giận: \"Thôi mà, anh xin lỗi, được chưa?\"",
+      "Lời một người mẹ nói với con: \"Mẹ làm tất cả là vì con thôi.\"",
+      "Lời hứa trong tình yêu: \"Anh sẽ thay đổi, lần này thật đấy.\"",
+      "Câu an ủi bạn thất tình: \"Trời sinh voi sinh cỏ, lo gì.\"",
+      "Lời tỏ tình: \"Em là người con gái đầu tiên khiến anh muốn nghiêm túc.\"",
+      "Lý do từ chối tỏ tình: \"Mình làm bạn thì hơn, sợ mất đi tình bạn này.\"",
+      "Lời chồng nói với vợ sau cãi nhau: \"Thôi anh sai rồi, em ăn gì anh mua.\"",
+      "Tin nhắn lúc nửa đêm: \"Ngủ chưa? Tự nhiên nhớ em quá.\"",
+      "Lời chia tay: \"Em xứng đáng với người tốt hơn anh.\"",
+      "Câu nói khi níu kéo: \"Cho anh một cơ hội cuối cùng được không?\"",
+      "Lời bố nói với con đã lớn: \"Con cứ làm điều con thấy đúng, bố ủng hộ.\"",
+      "Lời tỏ tình qua tin nhắn: \"Anh thích em từ lần đầu gặp, nói ra cho nhẹ lòng.\"",
+      "Lời an ủi một người bạn đang buồn: \"Có gì kể tao nghe, tao ở đây.\"",
+      "Câu nói khi cầu hôn: \"Anh không có gì ngoài tình yêu và quyết tâm, em chịu không?\"",
+      "Lời mẹ chồng nói với con dâu: \"Con coi nhà này như nhà mình nhé.\"",
+      "Tin nhắn làm hòa: \"Hôm qua anh nóng quá, anh xin lỗi nha.\"",
+      "Lời chia tay nhẹ nhàng: \"Cảm ơn em vì những ngày đẹp, mình dừng ở đây nhé.\"",
+      "Câu tán tỉnh: \"Em có mệt không, vì em chạy trong đầu anh cả ngày.\"",
+      "Lời người yêu khi xa cách: \"Dù ở đâu thì em vẫn là nhà của anh.\"",
+      "Lời khuyên cho bạn đang yêu sai người: \"Mày tỉnh lại đi, nó không xứng đâu.\"",
+      "Câu nói lúc giận: \"Tùy anh, anh muốn làm gì thì làm.\"",
+      "Lời thú nhận: \"Anh đã sai, nhưng anh không muốn mất em.\"",
+      "Tin nhắn chúc mừng sinh nhật bạn thân: \"Thêm tuổi mới, mãi là đứa bạn lầy lội của tao nhé.\"",
+      "Lời người cha sau nhiều năm xa cách: \"Bố biết bố đã không ở bên con đủ.\"",
+      "Câu nói khi yêu xa: \"Em chờ được, miễn là cuối cùng có anh.\"",
+      "Lời chia tay phũ phàng: \"Hết yêu rồi thì níu kéo làm gì cho mệt.\"",
+      "Lời tỏ tình kiểu cũ: \"Anh thương em, em về làm vợ anh nha.\"",
+      "Câu nói khi muốn quay lại: \"Anh nghĩ tụi mình đã bỏ cuộc quá sớm.\"",
+      "Lời mẹ dặn con gái lấy chồng: \"Nhịn một chút thì nhà cửa êm ấm.\"",
+      "Tin nhắn quan tâm: \"Trời lạnh nhớ mặc ấm, đừng để bệnh nha.\"",
+      "Lời người yêu cũ: \"Anh vẫn để ý em sống thế nào.\"",
+      "Câu nói trong đám cưới: \"Anh hứa sẽ làm em cười nhiều hơn khóc.\"",
+      "Lời bạn thân khi mình sai: \"Tao nói thẳng nha, lần này là mày sai.\"",
+      "Lời dỗ dành con nhỏ: \"Không sao đâu, có ba mẹ đây rồi.\"",
+      "Câu tỏ tình vụng về: \"Ờ thì... anh không biết nói sao, nhưng anh thích em.\"",
+      "Lời chia tay viện cớ: \"Anh cần thời gian tập trung cho sự nghiệp.\"",
+      "Tin nhắn sau hẹn hò đầu tiên: \"Hôm nay vui lắm, mai gặp nữa nha?\"",
+      "Lời một người vợ mệt mỏi: \"Em không cần quà, em chỉ cần anh để ý em hơn.\"",
+      "Câu nói khi tha thứ: \"Thôi bỏ qua, ai cũng có lúc sai mà.\"",
+      "Lời tỏ tình lãng mạn: \"Nếu được chọn lại, anh vẫn chọn gặp em.\"",
+      "Lời an ủi người mất người thân: \"Mạnh mẽ lên, người ra đi cũng không muốn mình buồn.\"",
+      "Câu nói lúc ghen: \"Người đó là ai mà nhắn tin cho em giờ này?\"",
+      "Lời hứa của người cha: \"Tết này bố về, bố hứa đấy.\"",
+      "Tin nhắn chia tay: \"Mình nên dừng lại, em mệt rồi.\"",
+      "Câu nói khi muốn hàn gắn gia đình: \"Dù sao mình cũng là một nhà.\"",
+      "Lời tỏ tình táo bạo: \"Anh không muốn làm bạn em, anh muốn nhiều hơn thế.\"",
+      "Lời mẹ trách yêu: \"Lớn rồi mà chẳng biết tự lo, mẹ lo cho đến bao giờ.\"",
+      "Lời tỏ tình ngại ngùng: \"Anh để ý em lâu rồi, không biết em có biết không.\"",
+      "Câu nói khi chia tay trong giận dữ: \"Vậy thì chia tay, ai sợ ai.\"",
+      "Lời an ủi bạn vừa ly hôn: \"Coi như giải thoát, sống tiếp đi mày.\"",
+      "Tin nhắn nhắc nhở người yêu: \"Nhớ ăn cơm đúng giờ, đừng bỏ bữa nha.\"",
+      "Lời chồng nói khi vợ sinh con: \"Cảm ơn em đã vất vả vì gia đình mình.\"",
+      "Câu tán tỉnh hơi sến: \"Trời hôm nay nhiều sao quá, nhưng không sáng bằng mắt em.\"",
+      "Lời người yêu cũ nhắn lại: \"Dạo này em sống ổn không?\"",
+      "Lời khuyên cho bạn đang phân vân chia tay: \"Nếu phải hỏi thì câu trả lời đã rõ rồi.\"",
+      "Câu nói lúc làm hòa với mẹ: \"Con xin lỗi, con biết mẹ cũng vì con thôi.\"",
+      "Lời tỏ tình thẳng thắn: \"Anh thích em, không vòng vo nữa.\"",
+      "Tin nhắn lúc nhớ nhung: \"Tự nhiên thèm được ôm em một cái.\"",
+      "Lời chia tay đầy tiếc nuối: \"Không phải em không tốt, chỉ là mình không hợp.\"",
+      "Câu nói khi níu kéo bạn thân giận: \"Tụi mình quen nhau mười năm rồi mà.\"",
+      "Lời cha dặn con trước khi đi xa: \"Đi đường cẩn thận, có gì gọi về cho ba.\"",
+      "Lời người yêu trấn an: \"Có anh đây rồi, đừng sợ.\"",
+      "Câu nói khi ghen tuông: \"Anh thấy em với người đó hơi quá thân đấy.\"",
+      "Lời chúc mừng cưới của bạn thân: \"Mày mà cũng chịu lấy chồng cơ à, mừng cho mày.\"",
+      "Tin nhắn xin lỗi muộn màng: \"Anh biết đã quá trễ, nhưng anh vẫn muốn nói xin lỗi.\"",
+      "Lời mẹ nói khi con thất tình: \"Thôi con, người ta không thương thì mình thương mình.\"",
+      "Câu tỏ tình kiểu bạn bè: \"Hay là... mình thử yêu nhau xem sao?\"",
+      "Lời người vợ giận dỗi: \"Anh lúc nào cũng công việc, công việc.\"",
+      "Lời chia tay lạnh lùng: \"Mình kết thúc ở đây, đừng liên lạc nữa.\"",
+      "Câu nói khi muốn quay lại với gia đình: \"Con về rồi đây, con sai rồi.\"",
+      "Lời tỏ tình của người nhút nhát: \"Em... em có thể làm bạn gái anh không?\"",
+      "Tin nhắn hỏi thăm bạn lâu ngày: \"Lâu quá không gặp, dạo này sao rồi?\"",
+      "Lời an ủi con khi bị điểm kém: \"Không sao, lần sau cố hơn là được.\"",
+      "Câu nói khi yêu mà sợ tổn thương: \"Anh thích em, nhưng anh sợ lại đau lần nữa.\"",
+      "Lời người yêu hứa hẹn tương lai: \"Đợi anh ổn định, mình cưới nha.\"",
+      "Lời chia tay vì khoảng cách: \"Yêu xa mệt quá, mình dừng đi em.\"",
+      "Câu nói khi muốn hàn gắn với người yêu: \"Cho mình làm lại từ đầu được không?\"",
+      "Lời mẹ chồng khó tính: \"Con nấu ăn vậy chồng con sao chịu nổi.\"",
+      "Tin nhắn động viên người yêu trước kỳ thi: \"Cố lên, em làm được mà, anh tin em.\"",
+      "Lời tỏ tình muộn: \"Lẽ ra anh nên nói điều này từ lâu rồi.\"",
+      "Câu nói khi giận người thân: \"Con không muốn nói chuyện này nữa.\"",
+      "Lời người cha xin lỗi con: \"Ba đã không phải là người cha tốt.\"",
+      "Lời chia tay nhân văn: \"Cảm ơn em đã dạy anh cách yêu.\"",
+      "Câu tán tỉnh thông minh: \"Em làm nghề gì mà khiến anh quên cả đường về vậy?\"",
+      "Lời an ủi bạn mất việc: \"Mất chỗ này thì tìm chỗ khác, lo gì.\"",
+      "Tin nhắn của người yêu lúc đêm khuya: \"Anh không ngủ được, cứ nghĩ về em.\"",
+      "Lời mẹ tiễn con gái về nhà chồng: \"Sang đó nhớ giữ gìn sức khỏe nghe con.\"",
+      "Câu nói khi muốn người yêu thay đổi: \"Em mong anh dành cho em nhiều thời gian hơn.\"",
+      "Lời tỏ tình qua thư tay: \"Những dòng này anh viết đi viết lại cả chục lần.\"",
+      "Lời chia tay vì gia đình ngăn cản: \"Mình không thể đến với nhau được, xin lỗi em.\"",
+      "Câu nói khi tha thứ cho bạn: \"Thôi bỏ qua, tình bạn quan trọng hơn.\"",
+      "Lời người yêu khi mình buồn: \"Kể anh nghe đi, anh muốn hiểu em.\"",
+      "Tin nhắn rủ người cũ gặp lại: \"Cà phê một bữa nhé, nói chuyện cho rõ.\"",
+      "Lời mẹ lo lắng cho con: \"Mấy giờ rồi mà chưa về, mẹ lo muốn chết.\"",
+      "Câu tỏ tình chân thành nhất: \"Anh không hứa cho em giàu sang, chỉ hứa không bỏ em.\"",
+      "Lời an ủi người vừa chia tay: \"Hết một người là để chừa chỗ cho người tốt hơn.\"",
+      "Lời tỏ tình giản dị: \"Anh chỉ muốn mỗi sáng thức dậy đều thấy em.\""
+    ]
+  },
+  score_doi: {
+    type:'score', icon:'score',
+    title:'Giám khảo: Đời',
+    sub:'Một câu về sự nghiệp, đam mê, sống. Bạn chấm thang 10, khán giả đoán trước.',
+    cards:[
+      "Lời khuyên sự nghiệp: \"Cứ theo đam mê đi rồi tiền sẽ tới.\"",
+      "Caption sống ảo: \"Sống cho mình, mặc kệ thiên hạ.\"",
+      "Lý do nghỉ việc: \"Em thấy mình không phát triển được ở đây nữa.\"",
+      "Châm ngôn khởi nghiệp: \"Cứ làm đi, sai đâu sửa đó.\"",
+      "Lời tự nhủ buổi sáng: \"Hôm nay phải là phiên bản tốt nhất của mình.\"",
+      "Lời sếp động viên: \"Cố lên, công ty coi các bạn như gia đình.\"",
+      "Caption truyền động lực: \"Không có gì là không thể.\"",
+      "Lời khuyên cho người trẻ: \"Tuổi này cứ trải nghiệm đi, ổn định làm gì sớm.\"",
+      "Lý do trễ deadline: \"Em bận quá nên chưa làm kịp.\"",
+      "Lời người thành đạt: \"Tôi chưa bao giờ coi đó là công việc, đó là đam mê.\"",
+      "Câu nói khi xin tăng lương: \"Em nghĩ đóng góp của em xứng đáng được ghi nhận hơn.\"",
+      "Caption nghỉ việc: \"Tạm biệt vùng an toàn, chào đón hành trình mới.\"",
+      "Lời khuyên tài chính: \"Đừng tiết kiệm những gì còn lại sau khi tiêu, hãy tiêu những gì còn lại sau khi tiết kiệm.\"",
+      "Lời tự nhủ khi nản: \"Bỏ cuộc bây giờ thì uổng công bấy lâu.\"",
+      "Câu trả lời phỏng vấn: \"Điểm yếu của em là quá cầu toàn trong công việc.\"",
+      "Lời mentor: \"Thất bại không phải kẻ thù, sợ thất bại mới là.\"",
+      "Caption khoe thành tích: \"Quả ngọt cho những ngày không ngủ.\"",
+      "Lời khuyên chọn nghề: \"Chọn ngành nào dễ xin việc cho chắc.\"",
+      "Lý do từ chối cơ hội: \"Em chưa sẵn sàng, sợ mình không đủ giỏi.\"",
+      "Câu nói của người sắp về hưu: \"Giá mà hồi trẻ tôi đừng làm việc nhiều đến thế.\"",
+      "Lời tự nhủ khi bị từ chối: \"Không sao, cánh cửa này đóng thì cửa khác mở.\"",
+      "Caption động lực: \"Kỷ luật là cầu nối giữa mục tiêu và thành tựu.\"",
+      "Lời khuyên khởi nghiệp: \"Đừng chờ hoàn hảo mới bắt đầu, cứ bắt đầu rồi hoàn thiện.\"",
+      "Câu nói khi đổi nghề tuổi 40: \"Bắt đầu lại không bao giờ là quá muộn.\"",
+      "Lời sếp giao việc gấp: \"Cái này gấp lắm, ráng làm xong tối nay nhé.\"",
+      "Caption sau thất bại: \"Ngã ở đâu đứng dậy ở đó.\"",
+      "Lời khuyên cân bằng: \"Làm việc chăm chỉ, nhưng đừng quên sống.\"",
+      "Câu nói của người nghiện việc: \"Nghỉ ngơi là khi nào? Đối thủ đâu có nghỉ.\"",
+      "Lời tự nhủ trước thử thách lớn: \"Mình sinh ra không phải để tầm thường.\"",
+      "Lý do bỏ đam mê: \"Đam mê không trả được tiền nhà.\"",
+      "Câu nói khi được thăng chức: \"Đây mới chỉ là khởi đầu thôi.\"",
+      "Lời khuyên cho người mất phương hướng: \"Cứ đi rồi đường sẽ hiện ra.\"",
+      "Caption tối giản: \"Bớt sở hữu, thêm tự do.\"",
+      "Lời người trẻ tham vọng: \"Em muốn để lại dấu ấn gì đó cho đời.\"",
+      "Câu nói khi từ chối làm thêm giờ: \"Em xin phép về đúng giờ, em có việc gia đình.\"",
+      "Lời tự động viên: \"Khó khăn này rồi cũng sẽ qua.\"",
+      "Caption về tiền bạc: \"Tiền không phải tất cả, nhưng thiếu nó thì mệt thật.\"",
+      "Lời khuyên đầu tư: \"Đầu tư vào bản thân là khoản sinh lời tốt nhất.\"",
+      "Câu nói của người sợ thay đổi: \"Thôi cứ ổn định thế này cho lành.\"",
+      "Lời sếp khi từ chối tăng lương: \"Năm nay công ty khó khăn, các bạn thông cảm.\"",
+      "Caption tuổi 30: \"Ba mươi và vẫn đang tìm đường, vậy cũng được.\"",
+      "Lời tự nhủ khi so sánh với người khác: \"Mỗi người một múi giờ riêng.\"",
+      "Câu nói khi quyết định liều: \"Không thử sao biết, cùng lắm là làm lại.\"",
+      "Lời khuyên nghề nghiệp thực dụng: \"Yêu nghề là tốt, nhưng nghề phải nuôi được mình.\"",
+      "Caption sau khi nghỉ việc lương cao: \"Tiền nhiều mà không vui thì để làm gì.\"",
+      "Lời người từng bỏ cuộc: \"Giá mà hồi đó tôi cố thêm một chút.\"",
+      "Câu nói khi nhận lỗi trong công việc: \"Đó là trách nhiệm của em, em sẽ khắc phục.\"",
+      "Lời tự nhủ mỗi sáng: \"Hôm nay mình chỉ cần tốt hơn hôm qua một chút.\"",
+      "Caption truyền cảm hứng: \"Đừng đếm ngày tháng, hãy làm cho ngày tháng đáng kể.\"",
+      "Caption truyền cảm hứng: \"Đừng đếm ngày tháng, hãy làm cho ngày tháng đáng kể.\"",
+      "Lời khuyên cho người ngại bắt đầu: \"Phiên bản tệ nhất vẫn hơn ý tưởng nằm trong đầu.\"",
+      "Câu nói của người trẻ vỡ mộng: \"Hóa ra đam mê cũng không đủ để sống.\"",
+      "Lời sếp khích lệ giả tạo: \"Cứ cống hiến đi, công ty sẽ không quên các bạn đâu.\"",
+      "Caption khoe lối sống: \"Dậy sớm, tập gym, đọc sách, thành công là tất yếu.\"",
+      "Lời khuyên đổi nghề: \"Thị trường đang hot ngành đó, nhảy sang đi.\"",
+      "Câu nói khi quyết tâm: \"Năm nay mình phải khác, không thể như cũ nữa.\"",
+      "Lời người về hưu nhìn lại: \"Cả đời chạy theo tiền, giờ tiền cũng chẳng mua lại được thời gian.\"",
+      "Caption động lực sáo: \"Hãy theo đuổi đến khi kẻ thù phải gọi bạn là sếp.\"",
+      "Lời tự nhủ khi áp lực: \"Mình không được phép gục ngã lúc này.\"",
+      "Câu nói khi từ chối thăng chức: \"Em thấy mình hợp làm chuyên môn hơn quản lý.\"",
+      "Lời khuyên tài chính cho người trẻ: \"Đừng để tiền nằm im, hãy để tiền làm việc.\"",
+      "Caption nghỉ phép: \"Tắt điện thoại, sạc lại chính mình.\"",
+      "Lời người sợ rủi ro: \"Thôi cứ làm công ăn lương cho chắc.\"",
+      "Câu nói khi khởi nghiệp thất bại: \"Mất tiền nhưng được bài học, cũng đáng.\"",
+      "Lời mentor nghiêm khắc: \"Em chưa đủ cố gắng, đừng đổ tại hoàn cảnh.\"",
+      "Caption về sự kiên trì: \"Giọt nước làm mòn đá không phải vì mạnh, mà vì bền.\"",
+      "Lời khuyên chọn ngành học: \"Học cái gì ra trường có việc ngay ấy.\"",
+      "Câu nói của người trì hoãn: \"Để mai làm, hôm nay mệt rồi.\"",
+      "Lời tự động viên sau thất bại: \"Đây không phải dấu chấm hết, chỉ là dấu phẩy.\"",
+      "Caption sống tối giản: \"Càng ít thứ phải lo, càng nhiều chỗ để thở.\"",
+      "Lời người tham công tiếc việc: \"Nghỉ một ngày là tụt lại một bước.\"",
+      "Câu nói khi nhận dự án khó: \"Khó thì mới đáng làm chứ.\"",
+      "Lời khuyên cho người mất động lực: \"Đừng đợi có hứng mới làm, làm rồi sẽ có hứng.\"",
+      "Caption tuổi trẻ: \"Hai mươi tuổi, không có gì ngoài thời gian và ước mơ.\"",
+      "Lời sếp khi sa thải nhân viên: \"Đây là quyết định khó khăn của công ty.\"",
+      "Câu nói khi cân nhắc nghỉ việc: \"Lương ổn nhưng mình thấy mình đang chết dần.\"",
+      "Lời khuyên về thói quen: \"Bạn là tổng hòa của những gì bạn làm mỗi ngày.\"",
+      "Caption khoe thành công: \"Không có đường tắt, chỉ có mồ hôi.\"",
+      "Lời người chọn an toàn: \"Ổn định cũng là một loại thành công mà.\"",
+      "Câu nói khi đặt mục tiêu lớn: \"Mơ nhỏ thì phí một đời.\"",
+      "Lời tự nhủ lúc kiệt sức: \"Nghỉ một chút thôi, rồi đi tiếp.\"",
+      "Caption về thất bại: \"Mỗi lần ngã là một lần biết đứng vững hơn.\"",
+      "Lời khuyên đầu tư bản thân: \"Cái đầu đầy hơn cái ví thì cả đời không lo đói.\"",
+      "Câu nói của người sợ thay đổi: \"Biết đâu đổi xong còn tệ hơn bây giờ.\"",
+      "Lời người thành đạt khiêm tốn: \"Tôi chỉ may mắn gặp đúng người đúng thời điểm.\"",
+      "Caption deadline: \"Cà phê là máu, deadline là nhịp tim.\"",
+      "Lời khuyên cân bằng công việc: \"Không ai trên giường bệnh ước mình làm việc nhiều hơn.\"",
+      "Câu nói khi liều lĩnh đổi đời: \"Cùng lắm là về vạch xuất phát, sợ gì.\"",
+      "Lời tự nhủ mỗi sáng: \"Việc khó nhất làm trước, ngày sẽ nhẹ đi.\"",
+      "Caption về đam mê: \"Làm điều mình yêu thì không có khái niệm thứ Hai.\"",
+      "Lời người tiếc nuối tuổi trẻ: \"Hồi đó nhát quá, giờ nghĩ lại tiếc.\"",
+      "Câu nói khi nhận lương đầu tiên: \"Đồng tiền tự kiếm có vị khác hẳn.\"",
+      "Lời khuyên cho người cầu toàn: \"Xong còn hơn hoàn hảo.\"",
+      "Caption khởi nghiệp: \"Người ta cười ý tưởng của bạn cho đến khi bạn thành công.\"",
+      "Lời người chọn gia đình hơn sự nghiệp: \"Tiền kiếm lại được, con lớn lên không đợi mình.\"",
+      "Câu nói khi bị từ chối phỏng vấn: \"Không phù hợp lúc này, không có nghĩa là không bao giờ.\"",
+      "Lời tự nhủ khi nản chí: \"Đã đi được nửa đường rồi, quay lại cũng xa như đi tiếp.\"",
+      "Caption về kỷ luật: \"Động lực đưa bạn bắt đầu, kỷ luật đưa bạn về đích.\"",
+      "Lời khuyên cuối cho người trẻ: \"Cứ sai khi còn trẻ, vì lúc đó sai còn rẻ.\"",
+      "Caption nhìn lại một năm: \"Không nhiều thành tựu, nhưng mình đã không bỏ cuộc.\""
+    ]
+  },
+  flip_da: {
+    type:'flip', icon:'flip',
+    title:'Đoán rồi lật',
+    sub:'Một câu hỏi có đáp án bất ngờ. Bạn và khán giả đoán, rồi lật ra cùng bình.',
+    cards:[
+      {q:"Theo các nghiên cứu tâm lý, yếu tố nào thường được xem là dự báo mạnh nhất việc một cặp đôi sẽ chia tay?",a:"Sự khinh thường lẫn nhau, tức thái độ coi thường, mỉa mai bạn đời. Nhà nghiên cứu John Gottman xem đây là một trong những dấu hiệu nguy hiểm nhất cho một mối quan hệ."},
+      {q:"Theo một nghiên cứu được trích dẫn rộng rãi, người ta cần khoảng bao nhiêu giờ ở bên nhau để chuyển từ người quen thành bạn thân?",a:"Khoảng hơn 200 giờ. Nghiên cứu của Jeffrey Hall ước tính cần tầm 50 giờ để thành bạn thường, 90 giờ thành bạn tốt, và hơn 200 giờ mới thành bạn thân."},
+      {q:"Nghiên cứu kéo dài hơn 80 năm của Đại học Harvard cho thấy điều gì là yếu tố dự báo tốt nhất cho một cuộc đời hạnh phúc và khỏe mạnh?",a:"Chất lượng các mối quan hệ thân thiết, không phải tiền bạc hay danh vọng. Những người có quan hệ ấm áp có xu hướng sống thọ hơn và hài lòng hơn."},
+      {q:"Theo nhiều ước tính tâm lý, một người trung bình ra khoảng bao nhiêu quyết định mỗi ngày chỉ riêng về chuyện ăn uống?",a:"Khoảng 200 quyết định mỗi ngày liên quan đến ăn uống, phần lớn diễn ra một cách vô thức. Đây là một lý do khiến ý chí dễ cạn vào cuối ngày."},
+      {q:"Hiện tượng tâm lý nào khiến những người càng kém năng lực ở một lĩnh vực lại càng có xu hướng tự tin thái quá về năng lực đó?",a:"Hiệu ứng Dunning-Kruger. Người thiếu kỹ năng thường không đủ nhận thức để thấy được giới hạn của chính mình, nên dễ đánh giá cao bản thân."},
+      {q:"Theo nghiên cứu của Robin Dunbar, một người trung bình có thể duy trì khoảng bao nhiêu mối quan hệ xã hội ổn định cùng lúc?",a:"Khoảng 150 mối quan hệ, thường gọi là con số Dunbar. Trong đó chỉ một số rất ít là quan hệ thân thiết thực sự."},
+      {q:"Trong tâm lý học, xu hướng ta thích một thứ gì đó hơn chỉ vì được tiếp xúc với nó nhiều lần được gọi là gì?",a:"Hiệu ứng tiếp xúc đơn thuần (mere exposure effect). Càng quen thuộc với một người hay một thứ gì đó, ta càng có xu hướng thấy có cảm tình hơn."},
+      {q:"Theo lý thuyết tâm lý, điều gì thường khiến con người hối tiếc nhiều hơn về lâu dài: những việc đã làm hay những việc chưa dám làm?",a:"Những việc chưa dám làm. Các nghiên cứu cho thấy về lâu dài, người ta thường tiếc nuối những cơ hội bỏ lỡ nhiều hơn là những hành động đã thực hiện."},
+      {q:"Khuynh hướng ta tin rằng mình đã biết trước kết quả sau khi sự việc đã xảy ra được gọi là gì?",a:"Thiên kiến nhận thức muộn (hindsight bias), hay tâm lý kiểu biết rồi nói mãi. Sau khi biết kết quả, ta thấy mọi thứ như thể đã hiển nhiên ngay từ đầu."},
+      {q:"Theo nghiên cứu về hạnh phúc, sau khi thu nhập đã đủ để đáp ứng nhu cầu cơ bản, việc kiếm thêm nhiều tiền có làm tăng hạnh phúc đáng kể không?",a:"Tác động giảm dần rõ rệt. Khi nhu cầu cơ bản đã được đáp ứng, mỗi đồng thêm vào mang lại mức tăng hạnh phúc ngày càng ít, dù không hẳn dừng hoàn toàn."},
+      {q:"Trong tâm lý học xã hội, hiện tượng người ta ít có khả năng giúp đỡ một nạn nhân khi có nhiều người chứng kiến được gọi là gì?",a:"Hiệu ứng người ngoài cuộc (bystander effect). Càng đông người chứng kiến, mỗi cá nhân càng cảm thấy trách nhiệm bị san sẻ và ít hành động hơn."},
+      {q:"Theo các nghiên cứu, việc đặt tên cho cảm xúc của mình (như buồn, lo, giận) có tác dụng gì với não bộ?",a:"Giúp giảm cường độ cảm xúc tiêu cực. Việc gọi tên cảm xúc kích hoạt vùng lý trí và làm dịu phản ứng của vùng cảm xúc trong não."},
+      {q:"Khuynh hướng ta chỉ tìm kiếm và tin vào thông tin ủng hộ điều mình đã tin sẵn được gọi là gì?",a:"Thiên kiến xác nhận (confirmation bias). Ta vô thức lọc bỏ thông tin trái chiều và phóng đại những gì củng cố niềm tin có sẵn."},
+      {q:"Theo nghiên cứu của Carol Dweck, kiểu tư duy nào giúp con người kiên trì và phát triển tốt hơn khi gặp thất bại?",a:"Tư duy phát triển (growth mindset), niềm tin rằng năng lực có thể rèn luyện được. Người có tư duy này xem thất bại là cơ hội học hỏi thay vì bằng chứng về giới hạn."},
+      {q:"Trong tâm lý học, việc một kỳ vọng tự nó trở thành hiện thực vì người ta hành xử theo đúng kỳ vọng đó được gọi là gì?",a:"Lời tiên tri tự ứng nghiệm (self-fulfilling prophecy). Niềm tin của ta về một kết quả có thể vô tình khiến ta hành động theo cách làm nó thành sự thật."},
+      {q:"Theo nguyên lý được nhiều người trích dẫn, khoảng bao nhiêu phần trăm kết quả thường đến từ một phần nhỏ nguyên nhân?",a:"Khoảng 80% kết quả đến từ 20% nguyên nhân, gọi là nguyên lý Pareto. Một phần nhỏ nỗ lực hoặc yếu tố thường tạo ra phần lớn thành quả."},
+      {q:"Theo nghiên cứu giấc ngủ, việc thiếu ngủ kéo dài ảnh hưởng đến khả năng ra quyết định và kiểm soát cảm xúc như thế nào?",a:"Làm suy giảm rõ rệt cả hai. Thiếu ngủ khiến vùng lý trí hoạt động kém và vùng cảm xúc phản ứng mạnh hơn, dẫn đến quyết định bốc đồng và dễ cáu gắt."},
+      {q:"Hiện tượng tâm lý khiến ta cảm thấy mất một thứ gì đó đau hơn nhiều so với niềm vui khi nhận được thứ tương đương được gọi là gì?",a:"Ác cảm mất mát (loss aversion). Theo nghiên cứu của Kahneman và Tversky, nỗi đau khi mất thường mạnh gấp khoảng hai lần niềm vui khi được."},
+      {q:"Theo các nghiên cứu về thói quen, yếu tố nào quan trọng hơn để duy trì một thay đổi lâu dài: ý chí mạnh mẽ hay môi trường phù hợp?",a:"Môi trường phù hợp. Ý chí dễ cạn kiệt, trong khi một môi trường được thiết kế tốt giúp hành vi mong muốn diễn ra tự nhiên mà ít cần gắng sức."},
+      {q:"Trong tâm lý học, việc một ấn tượng tích cực ở một khía cạnh khiến ta cho rằng người đó tốt ở mọi khía cạnh được gọi là gì?",a:"Hiệu ứng hào quang (halo effect). Một đặc điểm nổi bật khiến ta vô thức suy ra những phẩm chất tốt khác mà chưa có bằng chứng."},
+      {q:"Theo nghiên cứu, nụ cười có thể ảnh hưởng đến tâm trạng của chính người cười không, ngay cả khi nụ cười là gượng ép?",a:"Có, ở một mức độ nhất định. Giả thuyết phản hồi khuôn mặt cho rằng hành động cười có thể tác động ngược lại cảm xúc, dù hiệu ứng này còn được tranh luận."},
+      {q:"Hiện tượng tâm lý khiến ta tiếp tục đầu tư vào một thứ chỉ vì đã lỡ bỏ nhiều công sức vào đó được gọi là gì?",a:"Ngụy biện chi phí chìm (sunk cost fallacy). Ta khó từ bỏ vì tiếc những gì đã đổ vào, dù điều hợp lý là nhìn về phía trước."},
+      {q:"Theo nghiên cứu về trí nhớ, ký ức của con người giống một bản ghi chính xác hay được tái dựng lại mỗi lần nhớ?",a:"Được tái dựng lại. Mỗi lần nhớ, não tái tạo ký ức và có thể vô tình thay đổi chi tiết, nên trí nhớ không đáng tin như ta tưởng."},
+      {q:"Trong tâm lý đám đông, xu hướng cá nhân làm theo số đông dù trái với nhận định của bản thân được gọi là gì?",a:"Sự tuân theo (conformity). Thí nghiệm của Solomon Asch cho thấy nhiều người chọn đáp án sai theo nhóm dù mắt họ thấy rõ điều ngược lại."},
+      {q:"Theo các nghiên cứu, việc viết ra điều mình biết ơn mỗi ngày có tác động gì đến tâm trạng?",a:"Có xu hướng cải thiện tâm trạng và sự hài lòng. Thực hành biết ơn đều đặn được nhiều nghiên cứu liên hệ với mức độ hạnh phúc cao hơn."},
+      {q:"Hiệu ứng khiến ta đánh giá cao hơn một thứ chỉ vì nó là của mình được gọi là gì?",a:"Hiệu ứng sở hữu (endowment effect). Người ta thường định giá một món đồ cao hơn khi đã sở hữu nó so với khi chưa có."},
+      {q:"Theo nghiên cứu, đa nhiệm (làm nhiều việc cùng lúc) thực sự giúp ta hiệu quả hơn hay kém đi?",a:"Thường kém đi. Não chủ yếu chuyển đổi qua lại giữa các việc chứ không làm song song, gây mất thời gian và tăng lỗi."},
+      {q:"Trong tâm lý học, việc gán hành vi của người khác cho tính cách họ, nhưng gán hành vi của mình cho hoàn cảnh, được gọi là gì?",a:"Sai lệch quy gán cơ bản (fundamental attribution error). Ta nói người khác trễ vì lười, còn mình trễ thì tại kẹt xe."},
+      {q:"Theo nghiên cứu về vận động, tập thể dục đều đặn có tác động đến trầm cảm nhẹ và lo âu như thế nào?",a:"Thường có tác dụng hỗ trợ tích cực. Nhiều nghiên cứu cho thấy vận động đều đặn giúp cải thiện tâm trạng, dù không thay thế điều trị chuyên môn khi cần."},
+      {q:"Hiện tượng nhóm đưa ra quyết định cực đoan hơn so với từng cá nhân riêng lẻ được gọi là gì?",a:"Sự phân cực nhóm (group polarization). Khi bàn bạc, các thành viên có xu hướng củng cố và đẩy quan điểm chung đi xa hơn."},
+      {q:"Theo nghiên cứu, việc ngủ đủ giấc ảnh hưởng đến khả năng ghi nhớ và học tập ra sao?",a:"Rất quan trọng. Giấc ngủ, đặc biệt là các giai đoạn sâu, giúp não củng cố và lưu giữ những gì đã học trong ngày."},
+      {q:"Trong tâm lý, xu hướng nhớ rõ những việc chưa hoàn thành hơn những việc đã xong được gọi là gì?",a:"Hiệu ứng Zeigarnik. Các nhiệm vụ dang dở tạo một sức căng tinh thần khiến ta nhớ chúng dai dẳng hơn."},
+      {q:"Theo nghiên cứu, lời khen ngợi nỗ lực hay khen ngợi trí thông minh giúp trẻ kiên trì hơn khi gặp khó?",a:"Khen ngợi nỗ lực. Nghiên cứu của Carol Dweck cho thấy khen nỗ lực nuôi dưỡng tư duy phát triển, còn khen trí thông minh dễ khiến trẻ sợ thất bại."},
+      {q:"Hiện tượng ta cảm thấy thời gian trôi nhanh hơn khi lớn tuổi có cơ sở tâm lý nào?",a:"Một giải thích là tỷ lệ thời gian: một năm với người 50 tuổi là phần nhỏ hơn của đời họ so với một năm với đứa trẻ. Sự thiếu trải nghiệm mới cũng khiến thời gian như trôi nhanh."},
+      {q:"Theo tâm lý học, việc nghỉ giải lao ngắn trong lúc làm việc ảnh hưởng đến năng suất thế nào?",a:"Thường giúp duy trì sự tập trung. Nhiều nghiên cứu cho thấy nghỉ ngắn đều đặn giúp não phục hồi và giảm sa sút hiệu suất theo thời gian."},
+      {q:"Trong tâm lý xã hội, việc ta thích một người hơn sau khi giúp đỡ họ được gọi là gì?",a:"Hiệu ứng Ben Franklin. Nghịch lý là sau khi làm ơn cho ai đó, ta lại có xu hướng quý họ hơn, vì não tự lý giải hành động của mình."},
+      {q:"Theo nghiên cứu, dành tiền cho trải nghiệm hay cho vật chất thường mang lại hạnh phúc lâu dài hơn?",a:"Thường là trải nghiệm. Niềm vui từ vật chất dễ phai do thích nghi, còn trải nghiệm để lại ký ức và cảm giác kết nối bền hơn."},
+      {q:"Hiện tượng một nỗi sợ hay lo lắng được nói ra thành lời thường trở nên bớt đáng sợ hơn dựa trên cơ chế nào?",a:"Việc đặt tên cảm xúc kích hoạt vùng lý trí của não và làm dịu phản ứng của vùng cảm xúc, giúp ta lấy lại sự bình tĩnh."},
+      {q:"Theo nghiên cứu, các mối quan hệ xã hội yếu (người quen sơ) đóng vai trò gì trong việc tìm cơ hội như việc làm?",a:"Quan trọng bất ngờ. Lý thuyết sức mạnh của các mối quan hệ yếu cho rằng người quen sơ thường mang đến thông tin và cơ hội mới mà nhóm thân thiết không có."},
+      {q:"Trong tâm lý, việc ta đánh giá khả năng xảy ra của một sự kiện cao hơn chỉ vì nó dễ nhớ hoặc gây ấn tượng mạnh được gọi là gì?",a:"Phỏng đoán theo tính sẵn có (availability heuristic). Ta nghĩ tai nạn máy bay phổ biến hơn thực tế vì nó được đưa tin nhiều và gây ám ảnh."},
+      {q:"Theo nghiên cứu, việc tự nói chuyện với bản thân bằng ngôi thứ hai hoặc tên riêng có tác dụng gì khi căng thẳng?",a:"Giúp tạo khoảng cách tâm lý và bình tĩnh hơn. Gọi tên mình thay vì dùng tôi giúp nhìn vấn đề khách quan như đang khuyên một người khác."},
+      {q:"Hiện tượng khi ta vừa mới để ý đến một thứ thì lại thấy nó xuất hiện khắp nơi được gọi là gì?",a:"Hiện tượng tần suất ảo (frequency illusion), hay Baader-Meinhof. Não chú ý có chọn lọc nên cảm giác như thứ đó đột nhiên phổ biến hơn."},
+      {q:"Theo nghiên cứu về quyết định, có quá nhiều lựa chọn ảnh hưởng đến sự hài lòng của con người ra sao?",a:"Thường làm giảm sự hài lòng. Quá nhiều lựa chọn dễ gây tê liệt quyết định và khiến ta tiếc nuối các phương án đã bỏ qua."},
+      {q:"Trong tâm lý học, xu hướng tiếp tục tin vào ấn tượng đầu tiên về ai đó dù có bằng chứng ngược lại được gọi là gì?",a:"Hiệu ứng ấn tượng đầu tiên (primacy effect). Thông tin tiếp nhận sớm có sức nặng lớn và khó bị thay đổi về sau."},
+      {q:"Theo nghiên cứu, hành động giúp đỡ người khác ảnh hưởng đến hạnh phúc của chính người cho đi như thế nào?",a:"Thường làm tăng hạnh phúc. Nhiều nghiên cứu cho thấy chi tiền hoặc dành thời gian cho người khác mang lại niềm vui cho chính người cho."},
+      {q:"Hiện tượng ta tin rằng người khác để ý đến vẻ ngoài và lỗi lầm của mình nhiều hơn thực tế được gọi là gì?",a:"Hiệu ứng ánh đèn sân khấu (spotlight effect). Ta phóng đại mức độ người khác chú ý đến mình, trong khi họ thường ít để tâm hơn nhiều."},
+      {q:"Theo nghiên cứu, việc trì hoãn thường bắt nguồn từ sự lười biếng hay từ cảm xúc tiêu cực với nhiệm vụ?",a:"Thường từ cảm xúc. Trì hoãn nhiều khi là cách né tránh lo âu, chán nản hoặc nỗi sợ thất bại liên quan đến nhiệm vụ, hơn là lười đơn thuần."},
+      {q:"Trong tâm lý học, việc một câu hỏi được đặt theo cách khác nhau làm thay đổi câu trả lời của người ta được gọi là gì?",a:"Hiệu ứng đóng khung (framing effect). Cùng một thông tin nhưng cách trình bày khác nhau (được hay mất) dẫn đến lựa chọn khác nhau."},
+      {q:"Theo nghiên cứu, thời gian ở trong thiên nhiên có tác động đo lường được đến căng thẳng không?",a:"Có. Nhiều nghiên cứu liên hệ thời gian trong môi trường tự nhiên với việc giảm hormone căng thẳng và cải thiện tâm trạng."},
+      {q:"Hiện tượng khi kỳ vọng của một người về người khác vô tình khiến người kia hành xử đúng như vậy được gọi là gì?",a:"Hiệu ứng Pygmalion. Kỳ vọng cao của thầy cô hoặc sếp có thể thực sự nâng cao thành tích của học trò hoặc nhân viên."},
+      {q:"Theo nghiên cứu, việc đa số người tự đánh giá mình lái xe giỏi hơn mức trung bình phản ánh thiên kiến gì?",a:"Hiệu ứng trên trung bình (illusory superiority). Phần lớn người ta tin mình giỏi hơn mức trung bình, điều bất khả thi về mặt thống kê."},
+      {q:"Trong tâm lý, việc não điền vào khoảng trống và nhìn ra hình mẫu trong dữ liệu ngẫu nhiên được gọi là gì?",a:"Pareidolia hay rộng hơn là apophenia. Đây là lý do ta thấy mặt người trên đám mây hay ý nghĩa trong những trùng hợp ngẫu nhiên."},
+      {q:"Theo nghiên cứu, mức độ một người cảm thấy cô đơn liên quan nhiều hơn đến số lượng hay chất lượng các mối quan hệ?",a:"Chất lượng. Người ta có thể ở giữa đám đông mà vẫn cô đơn; cảm giác được thấu hiểu quan trọng hơn số lượng quan hệ."},
+      {q:"Hiện tượng ta nhớ phần đầu và phần cuối của một danh sách tốt hơn phần giữa được gọi là gì?",a:"Hiệu ứng vị trí nối tiếp (serial position effect), gồm hiệu ứng đầu chuỗi và cuối chuỗi. Các mục ở giữa dễ bị quên nhất."},
+      {q:"Theo nghiên cứu, việc đặt mục tiêu cụ thể và khó vừa phải so với mục tiêu mơ hồ ảnh hưởng đến kết quả ra sao?",a:"Mục tiêu cụ thể và thử thách vừa phải thường cho kết quả tốt hơn. Mục tiêu kiểu cố hết sức thường kém hiệu quả hơn mục tiêu rõ ràng."},
+      {q:"Trong tâm lý, việc một trải nghiệm đau đớn được nhớ chủ yếu qua đỉnh điểm và đoạn kết của nó được gọi là gì?",a:"Quy luật đỉnh-kết (peak-end rule). Ta đánh giá một trải nghiệm dựa nhiều vào lúc cao trào nhất và lúc kết thúc, hơn là toàn bộ."},
+      {q:"Theo nghiên cứu, thái độ phòng thủ khi bị phê bình thường xuất phát từ điều gì về mặt tâm lý?",a:"Thường từ cảm giác bị đe dọa cái tôi. Phê bình có thể bị não xử lý như một mối đe dọa, kích hoạt phản ứng tự vệ thay vì lắng nghe."},
+      {q:"Hiện tượng nhiều người cùng có mặt nhưng không ai hành động vì nghĩ người khác sẽ làm được gọi là gì?",a:"Sự phân tán trách nhiệm (diffusion of responsibility), một phần của hiệu ứng người ngoài cuộc. Trách nhiệm bị san đều nên không ai thấy mình phải ra tay."},
+      {q:"Theo nghiên cứu về thói quen, một hành vi mới mất bao lâu để trở nên tự động, theo các phát hiện thực tế?",a:"Rất khác nhau, trung bình khoảng vài tháng chứ không phải con số 21 ngày phổ biến. Một nghiên cứu ghi nhận trung bình tầm 66 ngày, dao động rộng tùy người và hành vi."},
+      {q:"Trong tâm lý, việc ta cảm thấy một mức giá hợp lý hay không phụ thuộc vào con số đầu tiên được đưa ra được gọi là gì?",a:"Hiệu ứng neo (anchoring). Con số đầu tiên ta tiếp xúc trở thành điểm tham chiếu, ảnh hưởng mạnh đến mọi đánh giá sau đó."},
+      {q:"Theo nghiên cứu, việc kể về mục tiêu của mình cho nhiều người nghe có luôn giúp ta đạt được nó không?",a:"Không chắc chắn, đôi khi ngược lại. Một số nghiên cứu gợi ý rằng được khen trước khi làm có thể tạo cảm giác đã hoàn thành, làm giảm động lực thực hiện."},
+      {q:"Hiện tượng ta đánh giá cả một người dựa trên một hành vi trong một thời điểm cụ thể được gọi là gì?",a:"Một dạng của sai lệch quy gán. Ta dễ kết luận về bản chất một người từ một lần gặp, mà bỏ qua vai trò của hoàn cảnh."},
+      {q:"Theo nghiên cứu, sự cô đơn kéo dài ảnh hưởng đến sức khỏe thể chất ở mức độ nào?",a:"Đáng kể. Nhiều nghiên cứu liên hệ cô đơn mạn tính với các nguy cơ sức khỏe, có nghiên cứu ví tác hại của nó tương đương một số thói quen có hại."},
+      {q:"Trong tâm lý, việc ta thấy một lựa chọn hấp dẫn hơn khi nó được đặt cạnh một lựa chọn kém hơn rõ rệt được gọi là gì?",a:"Hiệu ứng mồi nhử (decoy effect). Thêm một phương án kém hấp dẫn có chủ đích khiến một trong các phương án còn lại trông đáng chọn hơn."},
+      {q:"Theo nghiên cứu, việc hít thở chậm và sâu tác động đến hệ thần kinh khi ta lo lắng như thế nào?",a:"Giúp kích hoạt hệ thần kinh phó giao cảm, làm chậm nhịp tim và tạo cảm giác bình tĩnh hơn. Đây là cơ sở của nhiều kỹ thuật thư giãn."},
+      {q:"Hiện tượng người mới học một lĩnh vực tự tin thái quá, rồi tự tin tụt xuống khi hiểu sâu hơn, mô tả phần nào của hiệu ứng nào?",a:"Hiệu ứng Dunning-Kruger. Khi mới biết một chút, ta dễ tưởng mình giỏi; càng học sâu càng nhận ra mình biết ít, nên sự tự tin tạm giảm."},
+      {q:"Theo nghiên cứu, việc so sánh bản thân với người khác trên mạng xã hội thường ảnh hưởng đến tâm trạng ra sao?",a:"Thường tiêu cực. So sánh đi lên với hình ảnh được chọn lọc của người khác có liên hệ với việc giảm sự hài lòng và lòng tự trọng ở nhiều người."},
+      {q:"Trong tâm lý, việc ta gán cho thành công của mình là do năng lực còn thất bại là do hoàn cảnh được gọi là gì?",a:"Thiên kiến tự đề cao (self-serving bias). Ta bảo vệ cái tôi bằng cách nhận công khi thắng và đổ lỗi bên ngoài khi thua."},
+      {q:"Theo nghiên cứu, việc dành thời gian chất lượng cùng ăn cơm gia đình có liên hệ gì với trẻ em?",a:"Có liên hệ tích cực. Nhiều nghiên cứu gắn bữa cơm gia đình đều đặn với sức khỏe tinh thần tốt hơn và sự gắn kết bền hơn ở trẻ."},
+      {q:"Hiện tượng ta cảm thấy gắn bó với một người sau khi cùng trải qua tình huống căng thẳng được gọi là gì?",a:"Một dạng của hiểu lầm hưng phấn (misattribution of arousal). Cảm xúc mạnh từ tình huống có thể bị não gán nhầm thành sự hấp dẫn với người bên cạnh."},
+      {q:"Theo nghiên cứu, mỉm cười và đặt cơ thể ở tư thế cởi mở có ảnh hưởng đến sự tự tin chủ quan không?",a:"Có thể có, dù mức độ còn tranh luận. Một số nghiên cứu cho rằng tư thế cơ thể ảnh hưởng đến cảm giác tự tin, nhưng các phát hiện chưa hoàn toàn nhất quán."},
+      {q:"Trong tâm lý học, việc một người làm theo yêu cầu lớn dễ hơn nếu trước đó đã đồng ý một yêu cầu nhỏ được gọi là gì?",a:"Kỹ thuật chân trong cửa (foot-in-the-door). Đồng ý điều nhỏ tạo cảm giác nhất quán, khiến người ta dễ chấp nhận điều lớn hơn sau đó."},
+      {q:"Theo nghiên cứu, việc cho con cái quá nhiều lời khen sáo rỗng ảnh hưởng đến chúng thế nào?",a:"Có thể phản tác dụng. Khen chung chung và phóng đại có thể làm trẻ phụ thuộc vào sự công nhận và sợ thử thách, thay vì khen cụ thể vào nỗ lực."},
+      {q:"Hiện tượng ta nhớ một sự kiện theo cách bị bóp méo bởi cảm xúc hiện tại được gọi là gì?",a:"Một dạng của thiên kiến hồi tưởng cảm xúc. Tâm trạng hiện tại tô màu cách ta nhớ lại quá khứ, khiến ký ức không trung lập."},
+      {q:"Theo nghiên cứu, việc tập trung vào một việc duy nhất so với liên tục kiểm tra điện thoại ảnh hưởng đến chất lượng công việc ra sao?",a:"Tập trung sâu cho kết quả tốt hơn rõ rệt. Mỗi lần bị gián đoạn, não cần thời gian đáng kể để lấy lại trạng thái tập trung ban đầu."},
+      {q:"Trong tâm lý, việc một nhóm có ý kiến đồng thuận đến mức bỏ qua các quan điểm phản biện được gọi là gì?",a:"Tư duy tập thể (groupthink). Mong muốn hòa hợp khiến nhóm đè nén bất đồng và đưa ra quyết định kém chất lượng."},
+      {q:"Theo nghiên cứu, lòng biết ơn được thể hiện ra ảnh hưởng đến các mối quan hệ như thế nào?",a:"Thường củng cố mối quan hệ. Bày tỏ biết ơn với người khác có liên hệ với việc tăng sự gắn kết và thiện cảm giữa hai bên."},
+      {q:"Hiện tượng ta tiếp tục thấy đói hoặc thèm ăn dù vừa ăn xong, một phần do yếu tố tâm lý nào?",a:"Các tín hiệu môi trường và thói quen. Việc ăn nhiều khi bị kích hoạt bởi hoàn cảnh, cảm xúc hoặc hình ảnh đồ ăn, không chỉ do nhu cầu thật của cơ thể."},
+      {q:"Theo nghiên cứu, người ta có xu hướng đánh giá quá cao hay quá thấp khả năng dự đoán cảm xúc tương lai của mình?",a:"Thường đánh giá sai. Con người hay dự báo sai về cường độ và thời lượng cảm xúc tương lai, hiện tượng gọi là dự báo cảm xúc kém chính xác."},
+      {q:"Trong tâm lý, việc ta dễ chấp nhận một thông tin mơ hồ chung chung như thể nó nói riêng về mình được gọi là gì?",a:"Hiệu ứng Barnum hay Forer. Đây là lý do nhiều người thấy các mô tả tử vi hay bói toán đúng một cách kỳ lạ với bản thân."},
+      {q:"Theo nghiên cứu, việc học cách nói không và đặt ranh giới ảnh hưởng đến sức khỏe tinh thần ra sao?",a:"Thường tích cực. Khả năng đặt ranh giới lành mạnh có liên hệ với việc giảm kiệt sức và tăng sự hài lòng trong các mối quan hệ."},
+      {q:"Hiện tượng người ta đánh giá cao một sản phẩm hoặc kết quả hơn khi phải tự bỏ công làm ra nó được gọi là gì?",a:"Hiệu ứng IKEA. Công sức ta bỏ vào một thứ làm tăng giá trị cảm nhận của ta với chính nó, dù chất lượng khách quan không đổi."},
+      {q:"Theo nghiên cứu, việc ngủ trưa ngắn khoảng 10 đến 20 phút có tác động gì đến sự tỉnh táo?",a:"Thường giúp tăng tỉnh táo và hiệu suất. Giấc ngủ ngắn vừa đủ giúp phục hồi mà không rơi vào trạng thái uể oải sau ngủ sâu."},
+      {q:"Trong tâm lý, việc ta nhìn nhận quá khứ tươi đẹp hơn thực tế được gọi là gì?",a:"Hoài niệm hồng (rosy retrospection). Theo thời gian, ta có xu hướng nhớ những trải nghiệm cũ tích cực hơn so với cảm nhận lúc đó."},
+      {q:"Theo nghiên cứu, mức độ một người hài lòng với cuộc sống thay đổi theo độ tuổi như thế nào?",a:"Nhiều nghiên cứu mô tả một đường hình chữ U: hài lòng có xu hướng giảm ở tuổi trung niên rồi tăng trở lại khi lớn tuổi hơn, dù không đúng với tất cả mọi người."},
+      {q:"Hiện tượng não ưu tiên chú ý đến thông tin tiêu cực hơn tích cực được gọi là gì?",a:"Thiên lệch tiêu cực (negativity bias). Vì lý do tiến hóa, các mối đe dọa và tin xấu thu hút sự chú ý mạnh hơn tin tốt."},
+      {q:"Theo nghiên cứu, việc tập trung vào điểm mạnh thay vì chỉ sửa điểm yếu ảnh hưởng đến sự gắn kết công việc ra sao?",a:"Thường tích cực. Một số nghiên cứu cho thấy người được phát huy thế mạnh có xu hướng gắn bó và hài lòng với công việc hơn."},
+      {q:"Trong tâm lý, việc một người tin rằng mình không kiểm soát được kết quả nên ngừng cố gắng được gọi là gì?",a:"Sự bất lực học được (learned helplessness). Sau nhiều lần nỗ lực vô ích, người ta có thể buông xuôi ngay cả khi tình huống đã thay đổi."},
+      {q:"Theo nghiên cứu, cảm giác hồi hộp và phấn khích có giống nhau về mặt sinh lý không?",a:"Khá giống nhau. Cả hai đều gây tăng nhịp tim và kích thích; điều khác biệt nằm nhiều ở cách ta diễn giải trạng thái đó là sợ hay háo hức."},
+      {q:"Hiện tượng người ta gắn bó với lựa chọn đã đưa ra và tự thuyết phục rằng nó đúng được gọi là gì?",a:"Giảm bất hòa nhận thức (cognitive dissonance reduction). Sau khi chọn, ta vô thức tô đẹp lựa chọn của mình để thấy nhất quán và bớt khó chịu."},
+      {q:"Theo nghiên cứu, việc dành thời gian không màn hình trước khi ngủ ảnh hưởng đến giấc ngủ thế nào?",a:"Thường có lợi. Ánh sáng xanh và sự kích thích từ màn hình có thể làm chậm giấc ngủ, nên giảm dùng thiết bị trước khi ngủ thường giúp ngủ tốt hơn."},
+      {q:"Trong tâm lý, xu hướng đánh giá một nhóm người dựa trên một vài cá nhân nổi bật được gọi là gì?",a:"Khái quát hóa vội vàng, liên quan đến rập khuôn. Một vài trường hợp nổi bật bị lấy làm đại diện cho cả một nhóm, dẫn đến định kiến."},
+      {q:"Theo nghiên cứu, việc giúp đỡ người khác trong lúc bản thân đang buồn ảnh hưởng đến tâm trạng ra sao?",a:"Thường cải thiện tâm trạng. Hành động vị tha có thể chuyển hướng sự chú ý khỏi nỗi buồn của mình và tạo cảm giác có ý nghĩa."},
+      {q:"Theo nghiên cứu, việc viết ra những lo lắng trước một bài kiểm tra ảnh hưởng đến kết quả thế nào ở một số người?",a:"Có thể giúp cải thiện. Một số nghiên cứu cho thấy viết ra lo âu trước khi làm bài giúp giải phóng trí nhớ làm việc và giảm tác động của căng thẳng."},
+      {q:"Trong tâm lý, việc một người càng bị cấm đoán càng khao khát điều đó được gọi là gì?",a:"Phản kháng tâm lý (reactance). Khi cảm thấy tự do bị đe dọa, người ta có xu hướng muốn làm điều bị cấm mạnh hơn."},
+      {q:"Theo nghiên cứu, sự đồng cảm có thể bị cạn kiệt khi tiếp xúc quá nhiều với đau khổ không?",a:"Có. Hiện tượng mệt mỏi vì đồng cảm thường gặp ở người chăm sóc và nhân viên cứu trợ, khi tiếp xúc đau khổ kéo dài làm hao mòn khả năng cảm thông."},
+      {q:"Hiện tượng ta cho rằng quan điểm và lựa chọn của mình phổ biến hơn thực tế được gọi là gì?",a:"Hiệu ứng đồng thuận giả (false consensus effect). Ta có xu hướng nghĩ rằng nhiều người khác cũng nghĩ và hành xử giống mình hơn so với thực tế."},
+      {q:"Theo nghiên cứu, việc theo đuổi mục tiêu vì niềm vui bên trong so với vì phần thưởng bên ngoài ảnh hưởng đến sự bền bỉ ra sao?",a:"Động lực nội tại thường bền hơn. Người làm vì hứng thú và ý nghĩa tự thân có xu hướng kiên trì lâu hơn người chỉ làm vì thưởng phạt bên ngoài."},
+      {q:"Trong tâm lý, việc một lời đồn hoặc niềm tin sai được lặp lại nhiều lần khiến người ta tin là thật được gọi là gì?",a:"Hiệu ứng sự thật ảo (illusory truth effect). Càng nghe lặp lại một thông tin, ta càng có xu hướng cho rằng nó đúng, bất kể độ chính xác."},
+      {q:"Theo nghiên cứu, việc có một mục đích sống rõ ràng liên hệ thế nào với sức khỏe và tuổi thọ?",a:"Có liên hệ tích cực. Nhiều nghiên cứu gắn cảm giác sống có mục đích với sức khỏe tốt hơn và nguy cơ tử vong sớm thấp hơn."}
+    ]
+  },
+  fill_da: {
+    type:'fill', icon:'fill',
+    title:'Điền vào chỗ trống',
+    sub:'Một câu bỏ lửng. Bạn điền theo cách của mình, rồi mời khán giả điền kiểu họ.',
+    cards:[
+      "Một người trưởng thành thật sự là khi họ thôi...",
+      "Tình yêu chết không phải vì hết yêu, mà vì...",
+      "Điều đáng sợ nhất của tuổi 30 không phải là già đi, mà là...",
+      "Ta chỉ thật sự hiểu cha mẹ mình khi...",
+      "Thành công mà không có ___ thì cũng chỉ là một sự cô đơn sang trọng.",
+      "Người ta rời bỏ nhau không phải vì hết yêu, mà vì...",
+      "Điều khó nhất khi trưởng thành là học cách...",
+      "Một tình bạn thật sự được chứng minh không phải lúc vui, mà lúc...",
+      "Ta thường đánh mất chính mình khi cố gắng...",
+      "Hạnh phúc không phải là có nhiều hơn, mà là...",
+      "Sai lầm lớn nhất của tuổi trẻ là tin rằng...",
+      "Người ta chỉ trân trọng một thứ khi...",
+      "Điều khiến một mối quan hệ bền không phải tình yêu, mà là...",
+      "Ta học được nhiều nhất không phải từ thành công, mà từ...",
+      "Sự cô đơn tệ nhất không phải ở một mình, mà là...",
+      "Một người mạnh mẽ thật sự là người dám...",
+      "Ta chỉ thật sự tự do khi thôi...",
+      "Điều đáng giá nhất cha mẹ để lại cho con không phải tiền bạc, mà là...",
+      "Tình yêu trưởng thành khác tình yêu non trẻ ở chỗ...",
+      "Người ta hối tiếc nhất khi về già không phải điều đã làm, mà là...",
+      "Ta biết mình đã yêu thật khi...",
+      "Trưởng thành là khoảnh khắc ta nhận ra rằng...",
+      "Một lời xin lỗi chỉ có ý nghĩa khi đi kèm với...",
+      "Điều khiến công việc trở nên ý nghĩa không phải lương cao, mà là...",
+      "Ta chỉ buông bỏ được một người khi...",
+      "Sự tử tế thật sự là khi ta cho đi mà...",
+      "Nỗi sợ lớn nhất của con người không phải cái chết, mà là...",
+      "Một gia đình hạnh phúc không phải là không có mâu thuẫn, mà là...",
+      "Ta trưởng thành không phải khi thêm tuổi, mà khi...",
+      "Điều khó tha thứ nhất không phải lỗi lầm, mà là...",
+      "Người ta thường đánh giá thấp sức mạnh của...",
+      "Tình yêu đẹp nhất không phải là tìm được người hoàn hảo, mà là...",
+      "Ta chỉ thật sự bình an khi thôi so sánh mình với...",
+      "Điều quý giá nhất ta có thể tặng người khác là...",
+      "Một người đáng tin là người vẫn giữ lời ngay cả khi...",
+      "Ta thường nhận ra giá trị của một người khi...",
+      "Sự trưởng thành bắt đầu từ ngày ta thôi đổ lỗi cho...",
+      "Điều khiến một cuộc đời đáng sống không phải độ dài, mà là...",
+      "Ta yêu một người không phải vì họ hoàn hảo, mà vì...",
+      "Khó khăn không định nghĩa con người ta, mà chính là...",
+      "Người ta trưởng thành khi học được rằng im lặng đôi khi...",
+      "Điều tổn thương nhất trong một mối quan hệ không phải lời nói ra, mà là...",
+      "Ta chỉ thật sự lớn lên khi dám...",
+      "Một giấc mơ chỉ trở thành hiện thực khi ta...",
+      "Tình thân không được đo bằng khoảng cách, mà bằng...",
+      "Điều đáng sợ không phải là thất bại, mà là...",
+      "Ta học cách yêu bản thân khi cuối cùng nhận ra...",
+      "Một người bạn tốt là người ở lại ngay cả khi...",
+      "Sự bình yên thật sự đến khi ta chấp nhận rằng...",
+      "Điều khiến ta nhớ một người mãi không phải những gì họ nói, mà là...",
+      "Một mối quan hệ kết thúc không phải khi cãi nhau, mà khi...",
+      "Ta chỉ thật sự lắng nghe ai đó khi...",
+      "Điều khó nhất khi yêu một người là chấp nhận rằng...",
+      "Sự trưởng thành đôi khi chỉ là biết khi nào nên...",
+      "Người ta thay đổi không phải vì ai bắt buộc, mà vì...",
+      "Tình yêu không phải là nhìn vào nhau, mà là...",
+      "Ta học cách tha thứ khi hiểu rằng...",
+      "Điều quý nhất trong một tình bạn lâu năm là...",
+      "Một người trưởng thành biết rằng không phải lúc nào cũng cần...",
+      "Ta thường tổn thương nhất bởi những người...",
+      "Hạnh phúc gia đình không nằm ở vật chất, mà ở...",
+      "Điều đáng sợ của việc trì hoãn ước mơ là...",
+      "Ta chỉ biết trân trọng sức khỏe khi...",
+      "Một mối quan hệ trưởng thành cho phép cả hai được...",
+      "Sai lầm không khiến ta tệ đi, điều khiến ta tệ là...",
+      "Người ta cô đơn nhất không phải khi ở một mình, mà khi...",
+      "Ta nhận ra mình đã lớn khi cha mẹ bắt đầu...",
+      "Điều khiến một lời khuyên đáng nghe là người nói nó đã...",
+      "Tình yêu lâu bền không cần nồng cháy, chỉ cần...",
+      "Ta thật sự tự do khi không còn cần...",
+      "Điều khó buông bỏ nhất không phải con người, mà là...",
+      "Một người đáng tin là người ở bên ta cả khi...",
+      "Ta yêu bản thân khi cuối cùng thôi đòi hỏi mình phải...",
+      "Sự tử tế không mất gì, nhưng có thể...",
+      "Điều khiến tuổi 30 khác tuổi 20 là ta bắt đầu hiểu...",
+      "Người ta hối tiếc không phải vì đã yêu, mà vì...",
+      "Ta chỉ thật sự thấu hiểu một người khi...",
+      "Một gia đình bền vững được giữ bằng...",
+      "Điều quan trọng không phải đi nhanh đến đâu, mà là...",
+      "Ta trưởng thành khi thôi cố làm hài lòng...",
+      "Tình bạn thật sự không cần lời nói, chỉ cần...",
+      "Người mạnh mẽ không phải người không khóc, mà là người...",
+      "Điều đáng giá nhất ta học được từ nỗi đau là...",
+      "Ta chỉ thật sự sống khi dám...",
+      "Một mối quan hệ độc hại khiến ta dần quên mất...",
+      "Sự bình yên đến khi ta ngừng cố kiểm soát...",
+      "Điều khó nói nhất với người mình thương thường là...",
+      "Ta nhận ra giá trị của thời gian khi...",
+      "Một người thành công không phải người có nhiều nhất, mà là...",
+      "Tình yêu trưởng thành là khi hai người cùng...",
+      "Ta học được sự kiên nhẫn khi...",
+      "Điều khiến ta nhớ về tuổi trẻ không phải thành tích, mà là...",
+      "Một lời hứa chỉ đáng tin khi người hứa sẵn sàng...",
+      "Ta chỉ buông được quá khứ khi chấp nhận rằng...",
+      "Sự trưởng thành thật sự là khi ta thôi mong đợi người khác phải...",
+      "Điều làm nên một người cha tốt không phải tiền bạc, mà là...",
+      "Ta biết một tình bạn đáng giữ khi...",
+      "Hạnh phúc không phải đích đến, mà là cách ta...",
+      "Điều cuối cùng còn lại sau tất cả những đổ vỡ là...",
+      "Ta chỉ thật sự bắt đầu sống cho mình khi thôi sợ..."
+    ]
+  }
+};
+
+const order=['slider_tinh','rank_da','binary_career','binary_tinh','score_tinh','score_doi','flip_da','fill_da'];
+let cur=null, deck=[], curCard=null;
+
+// build hub
+const tiles=document.getElementById('tiles');
+order.forEach((key,i)=>{
+  const g=GAMES[key];
+  const kindLabel={slider:'Thanh trượt',rank:'Xếp hạng',binary:'Một trong hai',score:'Chấm điểm',flip:'Đoán & lật',fill:'Điền câu'}[g.type];
+  const el=document.createElement('button');
+  el.className='tile';el.style.animationDelay=(i*60)+'ms';
+  el.onclick=()=>openGame(key);
+  el.innerHTML=`<span class="kind">${kindLabel}</span>
+    <span class="ic">${ICONS[g.icon]}</span>
+    <h3>${g.title}</h3><p>${g.sub}</p>
+    <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>`;
+  tiles.appendChild(el);
+});
+
+function hideAllUI(){
+  document.getElementById('uiSlider').classList.remove('on');
+  document.getElementById('uiRank').classList.remove('on');
+  document.getElementById('uiBinary').classList.remove('on');
+  document.getElementById('uiScore').classList.remove('on');
+  document.getElementById('uiFlip').classList.remove('on');
+}
+
+function openGame(key){
+  cur=key;const g=GAMES[key];
+  document.getElementById('hub').style.display='none';
+  document.getElementById('gameView').classList.add('active');
+  document.getElementById('gIcon').innerHTML=ICONS[g.icon];
+  document.getElementById('gTitle').textContent=g.title;
+  document.getElementById('gSub').textContent=g.sub;
+  deck=shuffle([...g.cards]);
+  hideAllUI();
+  const p=document.getElementById('gPrompt');
+  p.className='prompt placeholder';p.removeAttribute('contenteditable');
+  p.textContent='Bấm để bắt đầu';
+  document.getElementById('gCounter').classList.remove('hidden');
+  document.getElementById('drawBtn').classList.remove('hidden');
+  document.getElementById('drawLabel').textContent=g.type==='fill'?'Câu mới':'Rút quân bài';
+  updateCounter();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function draw(){
+  const _scrollY=window.scrollY;
+  const g=GAMES[cur];
+  if(deck.length===0)deck=shuffle([...g.cards]);
+  curCard=deck.pop();
+  const p=document.getElementById('gPrompt');
+  hideAllUI();
+  p.className='prompt';p.removeAttribute('contenteditable');
+  void p.offsetWidth;p.classList.add('swap');
+
+  if(g.type==='slider'){
+    p.textContent='“'+curCard+'”';
+    const sl=document.getElementById('uiSlider');sl.classList.add('on');
+    document.getElementById('sliderLo').textContent=g.lo;
+    document.getElementById('sliderHi').textContent=g.hi;
+    const inp=document.getElementById('sliderInput');inp.value=5;
+    document.getElementById('sliderVal').textContent=5;
+    inp.oninput=()=>document.getElementById('sliderVal').textContent=inp.value;
+  }
+  else if(g.type==='rank'){
+    p.textContent=curCard.q;
+    const box=document.getElementById('uiRank');box.classList.add('on');box.innerHTML='';
+    shuffle([...curCard.items]).forEach(it=>{
+      const d=document.createElement('div');d.className='rank-item';d.draggable=true;
+      d.innerHTML=`<span class="pos"></span><span class="grip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg></span><span>${it}</span>`;
+      box.appendChild(d);
+    });
+    initDrag(box);renumber(box);
+  }
+  else if(g.type==='binary'){
+    p.textContent='Bạn chọn bên nào?';
+    const bw=document.getElementById('uiBinary');bw.classList.add('on');
+    const L=document.getElementById('binL'),R=document.getElementById('binR');
+    L.textContent=curCard.l;R.textContent=curCard.r;
+    L.className='binary';R.className='binary';
+  }
+  else if(g.type==='score'){
+    p.textContent='“'+curCard+'”';
+    const sw=document.getElementById('uiScore');sw.classList.add('on');sw.innerHTML='';
+    for(let n=1;n<=10;n++){
+      const b=document.createElement('button');b.className='score-btn';b.textContent=n;
+      b.onclick=()=>{sw.querySelectorAll('.score-btn').forEach(x=>x.classList.remove('picked'));b.classList.add('picked')};
+      sw.appendChild(b);
+    }
+  }
+  else if(g.type==='flip'){
+    p.textContent=curCard.q;
+    const f=document.getElementById('uiFlip');f.classList.remove('on');
+    document.getElementById('flipText').textContent=curCard.a;
+    document.getElementById('drawLabel').textContent='Lật đáp án';
+    document.getElementById('drawBtn').setAttribute('onclick','flipReveal()');
+  }
+  else if(g.type==='fill'){
+    p.className='prompt editable';p.setAttribute('contenteditable','true');
+    p.setAttribute('data-placeholder','...');
+    p.textContent=curCard;
+    placeCaretEnd(p);
+  }
+
+  // reset draw button cho cac type khong phai flip
+  if(g.type!=='flip'){
+    document.getElementById('drawBtn').setAttribute('onclick','draw()');
+    document.getElementById('drawLabel').textContent=(g.type==='fill')?'Câu mới':'Rút quân khác';
+  }
+  updateCounter();
+  // giu nguyen vi tri cuon, khong nhay len dau
+  window.scrollTo({top:_scrollY});
+}
+
+function flipReveal(){
+  document.getElementById('uiFlip').classList.add('on');
+  document.getElementById('drawLabel').textContent='Câu khác';
+  document.getElementById('drawBtn').setAttribute('onclick','draw()');
+}
+
+function pickBinary(side){
+  const L=document.getElementById('binL'),R=document.getElementById('binR');
+  L.className='binary';R.className='binary';
+  if(side==='l')L.classList.add('pick-l');else R.classList.add('pick-r');
+}
+
+/* drag & drop xep hang */
+let dragEl=null;
+function initDrag(box){
+  box.querySelectorAll('.rank-item').forEach(item=>{
+    item.addEventListener('dragstart',()=>{dragEl=item;item.classList.add('dragging')});
+    item.addEventListener('dragend',()=>{item.classList.remove('dragging');renumber(box)});
+  });
+  box.addEventListener('dragover',e=>{
+    e.preventDefault();
+    const after=getDragAfter(box,e.clientY);
+    if(after==null)box.appendChild(dragEl);
+    else box.insertBefore(dragEl,after);
+    renumber(box);
+  });
+}
+function getDragAfter(box,y){
+  const els=[...box.querySelectorAll('.rank-item:not(.dragging)')];
+  return els.reduce((closest,child)=>{
+    const b=child.getBoundingClientRect();const off=y-b.top-b.height/2;
+    if(off<0&&off>closest.offset)return{offset:off,element:child};
+    return closest;
+  },{offset:-Infinity}).element;
+}
+function renumber(box){
+  box.querySelectorAll('.rank-item').forEach((it,i)=>{it.querySelector('.pos').textContent=i+1});
+}
+
+function placeCaretEnd(el){
+  el.focus({preventScroll:true});
+  const r=document.createRange();r.selectNodeContents(el);r.collapse(false);
+  const s=window.getSelection();s.removeAllRanges();s.addRange(r);
+}
+function updateCounter(){
+  const g=GAMES[cur];const done=g.cards.length-deck.length;
+  document.getElementById('gCounter').innerHTML=`<b>${done}</b> / ${g.cards.length}`;
+}
+function goHub(){
+  document.getElementById('gameView').classList.remove('active');
+  document.getElementById('hub').style.display='block';
+  document.getElementById('drawBtn').setAttribute('onclick','draw()');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+</script>
+</body>
+</html>
